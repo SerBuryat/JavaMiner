@@ -16,5 +16,7 @@ public class GameField extends JPanel {
         this.add(gameBoard, BorderLayout.CENTER);
     }
 
-
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
 }

@@ -1,40 +1,56 @@
 package java_miner_package.view.game_field;
 
+import java_miner_package.controller.GameController;
 import java_miner_package.controller.MouseController;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameBoard extends JPanel {
-    private int blockWidth;
-    private int blockHeight;
     private int countCellsWidth;
     private int countCellsHeight;
+    private Block[][] board;
+    private boolean isGameBoardLoad;
+    private int blockArc;
 
     public GameBoard (int countCellsWidth, int countCellsHeight) {
         this.countCellsWidth = countCellsWidth;
         this.countCellsHeight = countCellsHeight;
-        addMouseListener(new MouseController());
+
+        this.board = new Block[countCellsWidth][countCellsHeight]; // create the game board array
+
+        this.isGameBoardLoad = false;
+
+        this.blockArc = 10; // rounding every block corner on 10px
+
+        addMouseListener(new MouseController()); // set mouse control on this board
     }
 
     public void paint(Graphics g) { // drawing gameField
         super.paint(g);
+        if(!(isGameBoardLoad)) // if gameBoard is not loaded -> load it with Block objects // test mode need to reform
+            this.fillGameBoardWithBlocks();
+        GameController.GAME_CONTROLLER.paintGameBoard(g, countCellsWidth, countCellsHeight, getBlockWidth(), getBlockHeight(), this.blockArc, this.board);
+    }
 
-        for(int i = 0; i < countCellsWidth; i++) {
-            for(int j = 0; j < countCellsHeight; j++) {
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillRoundRect(i * getBlockWidth(), j * getBlockHeight(), getBlockWidth(), getBlockHeight(), 10, 10);
-                g.setColor(Color.BLACK);
-                g.drawRoundRect(i * getBlockWidth(), j * getBlockHeight(), getBlockWidth(), getBlockHeight(), 10, 10);
-            }
-        }
+    public Block[][] getBoardArr() {
+        return board;
     }
 
     public int getBlockWidth() {
-        return blockWidth = (int) (this.getSize().getWidth() / this.countCellsWidth);
+        return  (int) (this.getSize().getWidth() / this.countCellsWidth);
     }
 
     public int getBlockHeight() {
-        return blockHeight = (int) (this.getSize().getHeight() / this.countCellsHeight);
+        return  (int) (this.getSize().getHeight() / this.countCellsHeight);
+    }
+
+    public void fillGameBoardWithBlocks() {
+        for(int x = 0; x < countCellsWidth; x++) {
+            for(int y = 0; y < countCellsHeight; y++) {
+                this.board[x][y] = new Block(x, y, getBlockWidth(), getBlockHeight());
+            }
+        }
+        this.isGameBoardLoad = true;
     }
 }

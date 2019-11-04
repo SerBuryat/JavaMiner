@@ -14,7 +14,7 @@ public class GameMenu extends JPanel  {
 
         menuStartButton = new MenuStartButton();
         buttonGameOptions = new JButton("Options");
-        buttonGameExit = new JButton("Exit");
+        buttonGameExit = new ExitGameButton();
         menuTitle = new JLabel("Java Miner");
 
         this.setBorder(new EmptyBorder(10,10,10,10));
