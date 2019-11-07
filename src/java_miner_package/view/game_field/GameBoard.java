@@ -1,7 +1,7 @@
 package java_miner_package.view.game_field;
 
 import java_miner_package.controller.GameController;
-import java_miner_package.controller.MouseController;
+import java_miner_package.controller.MouseControl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,7 @@ public class GameBoard extends JPanel {
 
         this.blockArc = 10; // rounding every block corner on 10px
 
-        addMouseListener(new MouseController()); // set mouse control on this board
+        addMouseListener(new MouseControl()); // set mouse control on this board
     }
 
     public void paint(Graphics g) { // drawing gameField

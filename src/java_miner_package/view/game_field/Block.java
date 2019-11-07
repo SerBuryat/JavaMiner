@@ -5,17 +5,24 @@ import java.awt.*;
 public class Block {
     private int x;
     private int y;
+    private int xMin; // min X position on a board // all this 4 parameters need to find block position on a screen
+    private int yMin; // min Y position on a board
+    private int xMax; // man X position on a board
+    private int yMax; // max Y position on a board
     private int blockSizeWidth;
     private int blockSizeHeight;
     private boolean isOpen;
     private boolean hasMine;
-    private boolean hasFlag;
 
     public Block(int x, int y, int blockSizeWidth, int blockSizeHeight) {
         this.x = x;
         this.y = y;
         this.blockSizeWidth = blockSizeWidth;
         this.blockSizeHeight = blockSizeHeight;
+        this.xMin = this.x * this.blockSizeWidth;
+        this.yMin = this.y * this.blockSizeHeight;
+        this.xMax = xMin + this.blockSizeWidth;
+        this.yMax = yMin + this.blockSizeHeight;
     }
 
     public void paintBlock(Graphics g, int blockWidth, int blockHeight, int blockArc) {
@@ -30,8 +37,10 @@ public class Block {
         g.drawRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc,blockArc);
     }
 
-    public boolean isInBlockBounds(int x, int y) {
-        return ((x >= this.x * blockSizeWidth && y >= this.y * blockSizeHeight)  && (x <= this.x * blockSizeWidth + blockSizeWidth && y <= this.y * blockSizeHeight + blockSizeHeight));
+    public boolean isPointInBlockBounds(Point p) {
+        int pointX = (int)p.getX();
+        int pointY = (int)p.getY();
+        return ((pointX >= xMin && pointY >= yMin) && (pointX <= xMax && pointY <= yMax));
     }
 
     @Override
@@ -53,5 +62,13 @@ public class Block {
 
     public int getY() {
         return y;
+    }
+
+    public int getBlockSizeWidth() {
+        return blockSizeWidth;
+    }
+
+    public int getBlockSizeHeight() {
+        return blockSizeHeight;
     }
 }

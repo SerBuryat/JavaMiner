@@ -2,7 +2,6 @@ package java_miner_package.controller;
 
 import java_miner_package.model.GameParametrs;
 import java_miner_package.view.game_field.Block;
-import java_miner_package.view.game_field.GameBoard;
 import java_miner_package.view.main_frame.GameWindow;
 
 import java.awt.*;
@@ -40,8 +39,16 @@ public class GameController {
         }
     }
 
-    public void openBlock(int x, int y, Block[][] board) {
-       board[x][y].setBlockOpen(true);
+    public void openBlock(Point p) {
+       Block[][] blocks = this.gameWindow.getGameField().getGameBoard().getBoardArr();
+        for(Block[] arr : blocks) {
+            for(Block block : arr) {
+                if(block.isPointInBlockBounds(p)) {
+                    block.setBlockOpen(true);
+                    break;
+                }
+            }
+        }
        repaintGameBoard();
     }
 
