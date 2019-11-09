@@ -19,18 +19,26 @@ public class GameWindow extends JFrame{
         this.setFocusable(true);
         this.setVisible(true);
 
-        gameMenu = new GameMenu();
-        gameField = new GameField();
+        this.gameMenu = new GameMenu();
+        this.gameField = new GameField();
 
-        this.getContentPane().add(gameMenu, BorderLayout.CENTER);
+        this.getContentPane().add(this.gameMenu, BorderLayout.CENTER);
     }
 
     public GameMenu getGameMenu() {
-        return gameMenu;
+        return this.gameMenu;
     }
 
     public GameField getGameField() {
-        return gameField;
+        return this.gameField;
+    }
+
+    public void hideGameMenu() {
+        this.gameMenu.setVisible(false);
+    }
+
+    public void showGameField() {
+        this.getContentPane().add(this.gameField, BorderLayout.CENTER);
     }
 
 }

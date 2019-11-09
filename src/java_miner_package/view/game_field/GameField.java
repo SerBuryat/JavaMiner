@@ -12,11 +12,11 @@ public class GameField extends JPanel {
 
     public GameField() { // initializing game field
         this.setBorder(new EmptyBorder(10,10,10,10));
-        this.setLayout(new BorderLayout());
+        this.setLayout(new GridLayout());
 
-        gameBoard = new GameBoard(GameController.GAME_CONTROLLER.getGameParameters().getCountCellsWidth(),
-                GameController.GAME_CONTROLLER.getGameParameters().getCountCellsHeight()); // give game board count of cells (width and height)
-        this.add(gameBoard, BorderLayout.CENTER);
+        this.gameBoard = new GameBoard(GameController.GAME_CONTROLLER.getGameParameters().getCellsCountWidth(),
+                GameController.GAME_CONTROLLER.getGameParameters().getCellsCountHeight()); // give game board count of cells (width and height)
+        this.add(this.gameBoard);
     }
 
     public GameBoard getGameBoard() {
