@@ -22,7 +22,6 @@ public class GameBoard extends JPanel {
         this.countCellsHeight = countCellsHeight;
 
         this.minesField = new Block[countCellsWidth][countCellsHeight]; // create the game board array
-        this.fillGameBoardWithBlocks(); // fill game board
 
         this.blockArc = 10; // rounding every block corner on 10px
 

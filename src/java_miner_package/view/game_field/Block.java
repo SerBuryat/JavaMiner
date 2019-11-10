@@ -1,10 +1,8 @@
 package java_miner_package.view.game_field;
 
-import java_miner_package.view.game_field.block_decorator.closed_block.ClosedBlockDecorator;
-import java_miner_package.view.game_field.block_decorator.open_block.Counter;
-import java_miner_package.view.game_field.block_decorator.closed_block.Flag;
-import java_miner_package.view.game_field.block_decorator.open_block.Mine;
-import java_miner_package.view.game_field.block_decorator.open_block.OpenBlockDecorator;
+import java_miner_package.view.game_field.block_decorator.Counter;
+import java_miner_package.view.game_field.block_decorator.Flag;
+import java_miner_package.view.game_field.block_decorator.Mine;
 
 import java.awt.*;
 
@@ -17,8 +15,6 @@ public class Block {
     private boolean hasMine;
     private boolean hasFlag;
     private int mineCounter;
-    private OpenBlockDecorator openBlockDecorator; // decorators when block OPEN
-    private ClosedBlockDecorator closedBlockDecorator; // decorators when block CLOSED
 
     public Block(int x, int y, int blockSizeWidth, int blockSizeHeight) {
         this.x = x;
@@ -29,15 +25,17 @@ public class Block {
 
     public void paintBlock(Graphics g, int blockWidth, int blockHeight, int blockArc) {
         if(this.isOpen) {
-            g.setColor(Color.WHITE);
+            g.setColor(Color.LIGHT_GRAY);
             g.fillRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc, blockArc);
-            if(this.openBlockDecorator != null) // if has some open decorator -> paint it
-                this.openBlockDecorator.paintBlockDecorator(g, this);
+            if(this.hasMine) // has mine? -> paint mine
+                new Mine().paintBlockDecorator(g, this);
+            if(this.mineCounter != 0) // has counter? -> paint counter
+                new Counter(this.mineCounter).paintBlockDecorator(g, this);
         } else {
             g.setColor(Color.GRAY);
             g.fillRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc, blockArc);
-            if(this.closedBlockDecorator != null) // if has some closed decorator -> paint it
-                this.closedBlockDecorator.paintBlockDecorator(g , this);
+            if(hasFlag) // has flag? -> paint flag
+                new Flag().paintBlockDecorator(g, this);
         }
         g.setColor(Color.BLACK);
         g.drawRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc,blockArc);
@@ -59,27 +57,20 @@ public class Block {
         return this.getClass().getSimpleName() + " " + "x - " + this.x + " : " + "y - " + this.y + " Block size : width - " + this.blockSizeWidth + " " + "height : " + this.blockSizeHeight;
     }
 
-    public void setBlockOpen(boolean open) {
+    public void setIsOpen(boolean open) {
         this.isOpen = open;
     }
 
     public void setFlag(boolean hasFlag) {
         this.hasFlag = hasFlag;
-        this.closedBlockDecorator = new Flag();
     }
 
     public void setMine(boolean hasMine) {
         this.hasMine = hasMine;
-        this.openBlockDecorator = new Mine();
     }
 
     public void setMineCounter(int mineCounter) {
         this.mineCounter = mineCounter;
-        this.openBlockDecorator = new Counter(mineCounter);
-    }
-
-    public boolean getIsBlockOpen() {
-        return this.isOpen;
     }
 
     public int getX() {
@@ -106,12 +97,11 @@ public class Block {
         return this.hasFlag;
     }
 
-    public void setClosedBlockDecorator(ClosedBlockDecorator closedBlockDecorator) {
-        this.closedBlockDecorator = closedBlockDecorator;
+    public int getMineCounter() {
+        return mineCounter;
     }
 
-    public void setOpenBlockDecorator(OpenBlockDecorator openBlockDecorator) {
-        this.openBlockDecorator = openBlockDecorator;
+    public boolean getIsOpen() {
+        return this.isOpen;
     }
-
 }

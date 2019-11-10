@@ -18,17 +18,18 @@ public class GameController {
     private Player player;
 
     public GameController() {
-        this.gameParameters = new GameParameters(); // load default parameters
+        this.gameParameters = new GameParameters(15, 15, 20); // 15 x 15 table and 20 mines
     }
 
     public void initialize() { // initializing game parameters
         this.gameWindow = new GameWindow();
-        this.gameModel = new GameModel(this.gameParameters, getGameBoard().getMinesField());
-        this.player = new Player(this.gameParameters);
     }
 
     public void start() {
+        this.gameModel = new GameModel(this.gameParameters, getGameBoard().getMinesField());
+        this.player = new Player(this.gameParameters);
         this.openGameField();
+        this.createGameBoard();
         this.gameModel.gameStart();
     }
 
@@ -49,7 +50,13 @@ public class GameController {
     }
 
     public void openBlock(Point p) {
-       this.gameModel.setBlockOpen(p);
+        for(Block[] arr : this.getGameBoard().getMinesField()) {
+            for(Block block : arr) {
+                if(block.isPointInBlockBounds(p)) {
+                    this.gameModel.setBlockOpen(block);
+                }
+            }
+        }
        this.repaintGameBoard();
     }
 
@@ -59,7 +66,14 @@ public class GameController {
     }
 
     public void setFlag(Point p) {
-        this.gameModel.setFlagOnBlock(p);
+        for(Block[] arr : this.getGameBoard().getMinesField()) {
+            for(Block block : arr) {
+                if(block.isPointInBlockBounds(p)) {
+                    this.gameModel.setFlagOnBlock(block);
+                    break;
+                }
+            }
+        }
         this.repaintGameBoard();
     }
 
@@ -69,7 +83,7 @@ public class GameController {
 
     public void openGameField() {
         this.gameWindow.hideGameMenu();
-        this.gameWindow.showGameField();
+        this.gameWindow.addAndShowGameField();
     }
 
     public void createGameBoard() {
