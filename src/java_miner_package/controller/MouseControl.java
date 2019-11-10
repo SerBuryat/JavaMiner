@@ -14,8 +14,8 @@ public class MouseControl implements MouseListener {
             GameController.GAME_CONTROLLER.openBlock(p);
         }
         if(e.getButton() == MouseEvent.BUTTON2) { // test
-            //GameController.GAME_CONTROLLER.openAllBlocks();
-            GameController.GAME_CONTROLLER.start();
+            //GameController.GAME_CONTROLLER.openAllBlocks(); // open all blocks for test
+            GameController.GAME_CONTROLLER.openAllBlocks(); // test
         }
         if(e.getButton() == MouseEvent.BUTTON3) {
             Point p = e.getPoint();

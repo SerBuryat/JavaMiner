@@ -1,7 +1,8 @@
-package java_miner_package.view.game_field;
+package java_miner_package.view.game_field.game_board;
 
 import java_miner_package.controller.GameController;
 import java_miner_package.controller.MouseControl;
+import java_miner_package.view.game_field.game_board.Block;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +16,8 @@ public class GameBoard extends JPanel {
     private int blockArc;
 
     public GameBoard (int countCellsWidth, int countCellsHeight) {
-        this.width = 770;//test
-        this.height = 750;//test
+        this.width = 700;//test
+        this.height = 700;//test
         this.setSize(this.width, this.height);
         this.countCellsWidth = countCellsWidth;
         this.countCellsHeight = countCellsHeight;
@@ -52,5 +53,6 @@ public class GameBoard extends JPanel {
             }
         }
     }
+
 
 }

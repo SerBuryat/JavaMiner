@@ -1,6 +1,6 @@
-package java_miner_package.view.game_field.block_decorator;
+package java_miner_package.view.game_field.game_board.block_decorator;
 
-import java_miner_package.view.game_field.Block;
+import java_miner_package.view.game_field.game_board.Block;
 
 import java.awt.*;
 

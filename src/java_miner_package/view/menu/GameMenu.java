@@ -12,10 +12,11 @@ public class GameMenu extends JPanel  {
 
    public GameMenu() { // initializing game start menu
 
-        menuStartButton = new MenuStartButton();
-        buttonGameOptions = new JButton("Options");
-        buttonGameExit = new ExitGameButton();
-        menuTitle = new JLabel("Java Miner");
+        this.menuStartButton = new MenuStartButton();
+        this.buttonGameOptions = new JButton("Options");
+        this.buttonGameExit = new ExitGameButton();
+        this.menuTitle = new JLabel("Java Miner");
+
 
         this.setBorder(new EmptyBorder(10,10,10,10));
         this.setLayout(new GridBagLayout());

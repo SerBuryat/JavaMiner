@@ -1,8 +1,8 @@
-package java_miner_package.view.game_field;
+package java_miner_package.view.game_field.game_board;
 
-import java_miner_package.view.game_field.block_decorator.Counter;
-import java_miner_package.view.game_field.block_decorator.Flag;
-import java_miner_package.view.game_field.block_decorator.Mine;
+import java_miner_package.view.game_field.game_board.block_decorator.Counter;
+import java_miner_package.view.game_field.game_board.block_decorator.Flag;
+import java_miner_package.view.game_field.game_board.block_decorator.Mine;
 
 import java.awt.*;
 
@@ -52,11 +52,6 @@ public class Block {
         return ((pointX >= xMin && pointY >= yMin) && (pointX <= xMax && pointY <= yMax));
     }
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + " " + "x - " + this.x + " : " + "y - " + this.y + " Block size : width - " + this.blockSizeWidth + " " + "height : " + this.blockSizeHeight;
-    }
-
     public void setIsOpen(boolean open) {
         this.isOpen = open;
     }
@@ -103,5 +98,10 @@ public class Block {
 
     public boolean getIsOpen() {
         return this.isOpen;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " " + "x - " + this.x + " : " + "y - " + this.y + " Block size : width - " + this.blockSizeWidth + " " + "height : " + this.blockSizeHeight;
     }
 }

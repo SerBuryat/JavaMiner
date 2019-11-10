@@ -1,6 +1,6 @@
 package java_miner_package.model;
 
-import java_miner_package.view.game_field.Block;
+import java_miner_package.view.game_field.game_board.Block;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -40,8 +40,9 @@ public class GameModel {
                     gameOverLose();
                 } else {
                     this.blocksCount-=1; // - 1 closed block
+                    System.out.println(this.getBlocksCount());
 
-                    if(this.blocksCount == (this.blocksCount - this.minesCount)) {// all blocks(without mines) open -> win
+                    if((this.blocksCount - this.minesCount) == 0) {// all blocks(without mines) open -> win
                         gameOverWin();
                         return;
                     }
@@ -75,8 +76,10 @@ public class GameModel {
                 block.setFlag(false);
                 this.flagsCount+=1;
             } else {
-                block.setFlag(true);
-                this.flagsCount-=1;
+                if(this.flagsCount > 0 && !block.getIsOpen()) {
+                    block.setFlag(true);
+                    this.flagsCount-=1;
+                }
             }
         }
     }
@@ -142,4 +145,11 @@ public class GameModel {
         System.out.println("Game is over. You LOSE!");
     }
 
+    public int getFlagsCount() {
+        return flagsCount;
+    }
+
+    public int getBlocksCount() {
+        return blocksCount;
+    }
 }

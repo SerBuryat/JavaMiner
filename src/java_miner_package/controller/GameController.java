@@ -3,8 +3,9 @@ package java_miner_package.controller;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
 import java_miner_package.model.Player;
-import java_miner_package.view.game_field.Block;
-import java_miner_package.view.game_field.GameBoard;
+import java_miner_package.view.game_field.game_board.Block;
+import java_miner_package.view.game_field.game_board.GameBoard;
+import java_miner_package.view.game_field.game_status_board.GameStatusBoard;
 import java_miner_package.view.main_frame.GameWindow;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ public class GameController {
     private Player player;
 
     public GameController() {
-        this.gameParameters = new GameParameters(15, 15, 20); // 15 x 15 table and 20 mines
+        this.gameParameters = new GameParameters(); // default game parameters (10 x 10 table , 10 mines) or can create manually
     }
 
     public void initialize() { // initializing game parameters
@@ -28,9 +29,9 @@ public class GameController {
     public void start() {
         this.gameModel = new GameModel(this.gameParameters, getGameBoard().getMinesField());
         this.player = new Player(this.gameParameters);
-        this.openGameField();
         this.createGameBoard();
         this.gameModel.gameStart();
+        this.getGameStatusBoard().setFlagsCount(this.gameModel.getFlagsCount());
     }
 
     public GameParameters getGameParameters() {
@@ -74,6 +75,7 @@ public class GameController {
                 }
             }
         }
+        this.getGameStatusBoard().setFlagsCount(this.gameModel.getFlagsCount());
         this.repaintGameBoard();
     }
 
@@ -81,17 +83,16 @@ public class GameController {
        this.getGameBoard().repaint();
     }
 
-    public void openGameField() {
-        this.gameWindow.hideGameMenu();
-        this.gameWindow.addAndShowGameField();
-    }
-
-    public void createGameBoard() {
+    private void createGameBoard() {
         this.getGameBoard().fillGameBoardWithBlocks();
         this.repaintGameBoard();
     }
 
     public GameWindow getGameWindow() {
         return gameWindow;
+    }
+
+    public GameStatusBoard getGameStatusBoard() {
+        return this.getGameWindow().getGameField().getGameStatusBoard();
     }
 }

@@ -9,7 +9,13 @@ public class MenuStartButton extends JButton {
     public MenuStartButton() {
         this.setText("Start Game");
         this.addActionListener(action -> {
+            this.hideMenuAndOpenGameField();
             GameController.GAME_CONTROLLER.start();
         });
+    }
+
+    private void hideMenuAndOpenGameField() {
+        GameController.GAME_CONTROLLER.getGameWindow().hideGameMenu();
+        GameController.GAME_CONTROLLER.getGameWindow().addAndShowGameField();
     }
 }
