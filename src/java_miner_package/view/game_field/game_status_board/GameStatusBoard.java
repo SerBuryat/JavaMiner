@@ -1,8 +1,8 @@
 package java_miner_package.view.game_field.game_status_board;
 
 import java_miner_package.model.GameParameters;
-import java_miner_package.model.Block;
 import java_miner_package.view.game_field.game_board.block_decorator.DecoratorImageResources;
+import java_miner_package.view.game_field.game_board.DrawBlock;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,10 +48,10 @@ public class GameStatusBoard extends JPanel {
 
         g.drawImage(DecoratorImageResources.MINE, this.minesCount.getX(), this.minesCount.getY() + this.fontSize, this.getWidth(), this.getWidth(), this); // draw Mine image
 
-        Block block = new Block(this.blocksCount.getX(), this.blocksCount.getY() + this.fontSize, this.getWidth()-1, this.getWidth());// draw Block image
-        g.setColor(block.getClosedColor());
-        g.fillRoundRect(block.getX(), block.getY(), block.getBlockSizeWidth(), block.getBlockSizeHeight(), block.getBlockArc(), block.getBlockArc());
-        g.setColor(block.getBordersColor());
-        g.drawRoundRect(block.getX(), block.getY(), block.getBlockSizeWidth(), block.getBlockSizeHeight(), block.getBlockArc(), block.getBlockArc());
+        DrawBlock drawBlock = new DrawBlock(this.blocksCount.getX(), this.blocksCount.getY() + this.fontSize, this.getWidth()-1, this.getWidth());// draw Block image
+        g.setColor(drawBlock.getClosedColor());
+        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getBlockSizeWidth(), drawBlock.getBlockSizeHeight(), drawBlock.getBlockArc(), drawBlock.getBlockArc());
+        g.setColor(drawBlock.getBordersColor());
+        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getBlockSizeWidth(), drawBlock.getBlockSizeHeight(), drawBlock.getBlockArc(), drawBlock.getBlockArc());
     }
 }

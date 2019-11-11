@@ -13,9 +13,9 @@ public class GameModel {
     private int fieldHeightLength;
     private boolean isGameStopped;
 
-    public GameModel(GameParameters gameParameters, Block[][] minesField) {
+    public GameModel(GameParameters gameParameters) {
         this.gameParameters = gameParameters;
-        this.minesField = minesField;
+        this.minesField = new Block[this.gameParameters.getCellsCountWidth()][this.gameParameters.getCellsCountHeight()];
         this.minesCount = this.gameParameters.getMinesCount();
         this.flagsCount = this.minesCount;
         this.fieldWidthLength = this.gameParameters.getCellsCountWidth();
@@ -25,8 +25,17 @@ public class GameModel {
     }
 
     public void gameStart() {
-        this.fillMinesFieldWithMines(); // fill mines field with mines
-        this.fillMinesFieldWithCounters(); // fill mines field with counters
+        this.fillMinesFieldWithBlocks(); // fill mines field with blocks
+        this.fillMinesFieldWithMines(); //  with mines
+        this.fillMinesFieldWithCounters(); // with counters
+    }
+
+    private void fillMinesFieldWithBlocks() {
+        for(int x = 0; x < this.gameParameters.getCellsCountWidth(); x++) {
+            for(int y = 0; y < this.gameParameters.getCellsCountHeight(); y++) {
+                this.minesField[x][y] = new Block(x, y);
+            }
+        }
     }
 
     private void fillMinesFieldWithMines() { // fill randomly mines field with mines
@@ -148,5 +157,9 @@ public class GameModel {
 
     public int getBlocksCount() {
         return blocksCount;
+    }
+
+    public Block[][] getMinesField() {
+        return minesField;
     }
 }

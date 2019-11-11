@@ -3,8 +3,8 @@ package java_miner_package.controller;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
 import java_miner_package.model.Player;
-import java_miner_package.model.Block;
 import java_miner_package.view.game_field.game_board.GameBoard;
+import java_miner_package.view.game_field.game_board.DrawBlock;
 import java_miner_package.view.game_field.game_status_board.GameStatusBoard;
 import java_miner_package.view.main_frame.GameWindow;
 
@@ -27,10 +27,13 @@ public class GameController {
     }
 
     public void gameInitialize() {
-        this.gameModel = new GameModel(this.gameParameters, getGameBoard().getMinesField());
-        this.player = new Player(this.gameParameters);
-        this.loadGameBoardWithBlocks();
+        this.gameModel = new GameModel(this.gameParameters); // create and start game
         this.gameModel.gameStart();
+
+        this.player = new Player(this.gameParameters);
+
+        this.loadGamePaintBoard(); // load paint board
+
         this.getGameStatusBoard().setFlagsCount(this.gameModel.getFlagsCount());
         this.getGameStatusBoard().setBlocksCount(this.gameModel.getBlocksCount());
     }
@@ -43,7 +46,7 @@ public class GameController {
         return this.gameWindow.getGameField().getGameBoard();
     }
 
-    public void paintGameBoard(Graphics g, int fieldWidth, int fieldHeight, int blockWidth, int blockHeight, Block[][] board) { // draw gameBoard
+    public void paintGameBoard(Graphics g, int fieldWidth, int fieldHeight, int blockWidth, int blockHeight, DrawBlock[][] board) { // draw gameBoard
         for(int x = 0; x < fieldWidth; x++) {
             for(int y = 0; y < fieldHeight; y++) {
                 board[x][y].paintBlock(g, blockWidth, blockHeight);
@@ -52,10 +55,10 @@ public class GameController {
     }
 
     public void openBlock(Point p) {
-        for(Block[] arr : this.getGameBoard().getMinesField()) {
-            for(Block block : arr) {
-                if(block.isPointInBlockBounds(p)) {
-                    this.gameModel.setBlockOpen(block);
+        for(DrawBlock[] arr : this.getGameBoard().getGamePaintBoard()) {
+            for(DrawBlock drawBlock : arr) {
+                if(drawBlock.isPointInBlockBounds(p)) {
+                    this.gameModel.setBlockOpen(drawBlock.getBlock());
                 }
             }
         }
@@ -70,10 +73,10 @@ public class GameController {
     }
 
     public void setFlag(Point p) {
-        for(Block[] arr : this.getGameBoard().getMinesField()) {
-            for(Block block : arr) {
-                if(block.isPointInBlockBounds(p)) {
-                    this.gameModel.setFlagOnBlock(block);
+        for(DrawBlock[] arr : this.getGameBoard().getGamePaintBoard()) {
+            for(DrawBlock drawBlock : arr) {
+                if(drawBlock.isPointInBlockBounds(p)) {
+                    this.gameModel.setFlagOnBlock(drawBlock.getBlock());
                     break;
                 }
             }
@@ -86,8 +89,8 @@ public class GameController {
        this.getGameBoard().repaint();
     }
 
-    private void loadGameBoardWithBlocks() {
-        this.getGameBoard().fillGameBoardWithBlocks();
+    private void loadGamePaintBoard() {
+        this.getGameBoard().loadGamePaintBoard();
         this.repaintGameBoard();
     }
 
@@ -97,5 +100,9 @@ public class GameController {
 
     public GameStatusBoard getGameStatusBoard() {
         return this.getGameWindow().getGameField().getGameStatusBoard();
+    }
+
+    public GameModel getGameModel() {
+        return gameModel;
     }
 }
