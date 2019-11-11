@@ -2,7 +2,7 @@ package java_miner_package.view.game_field.game_board;
 
 import java_miner_package.controller.GameController;
 import java_miner_package.controller.MouseControl;
-import java_miner_package.view.game_field.game_board.Block;
+import java_miner_package.model.Block;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,6 @@ public class GameBoard extends JPanel {
     private int countCellsWidth;
     private int countCellsHeight;
     private Block[][] minesField;
-    private int blockArc;
 
     public GameBoard (int countCellsWidth, int countCellsHeight) {
         this.width = 700;//test
@@ -24,14 +23,12 @@ public class GameBoard extends JPanel {
 
         this.minesField = new Block[countCellsWidth][countCellsHeight]; // create the game board array
 
-        this.blockArc = 10; // rounding every block corner on 10px
-
         addMouseListener(new MouseControl()); // set mouse control on this board
     }
 
     public void paint(Graphics g) { // drawing game board
         super.paint(g);
-        GameController.GAME_CONTROLLER.paintGameBoard(g, countCellsWidth, countCellsHeight, getBlockWidth(), getBlockHeight(), this.blockArc, this.minesField);
+        GameController.GAME_CONTROLLER.paintGameBoard(g, countCellsWidth, countCellsHeight, getBlockWidth(), getBlockHeight(),this.minesField);
     }
 
     public Block[][] getMinesField() {

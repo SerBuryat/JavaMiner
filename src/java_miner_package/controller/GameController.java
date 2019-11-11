@@ -3,7 +3,7 @@ package java_miner_package.controller;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
 import java_miner_package.model.Player;
-import java_miner_package.view.game_field.game_board.Block;
+import java_miner_package.model.Block;
 import java_miner_package.view.game_field.game_board.GameBoard;
 import java_miner_package.view.game_field.game_status_board.GameStatusBoard;
 import java_miner_package.view.main_frame.GameWindow;
@@ -19,19 +19,20 @@ public class GameController {
     private Player player;
 
     public GameController() {
-        this.gameParameters = new GameParameters(); // default game parameters (10 x 10 table , 10 mines) or can create manually
+        this.gameParameters = new GameParameters(); // default game parameters (15 x 15 table , 25 mines) or can create manually
     }
 
-    public void initialize() { // initializing game parameters
+    public void loadGameWindow() { // initializing game parameters
         this.gameWindow = new GameWindow();
     }
 
-    public void start() {
+    public void gameInitialize() {
         this.gameModel = new GameModel(this.gameParameters, getGameBoard().getMinesField());
         this.player = new Player(this.gameParameters);
-        this.createGameBoard();
+        this.loadGameBoardWithBlocks();
         this.gameModel.gameStart();
         this.getGameStatusBoard().setFlagsCount(this.gameModel.getFlagsCount());
+        this.getGameStatusBoard().setBlocksCount(this.gameModel.getBlocksCount());
     }
 
     public GameParameters getGameParameters() {
@@ -42,10 +43,10 @@ public class GameController {
         return this.gameWindow.getGameField().getGameBoard();
     }
 
-    public void paintGameBoard(Graphics g, int fieldWidth, int fieldHeight, int blockWidth, int blockHeight, int blockArc, Block[][] board) { // draw gameBoard
+    public void paintGameBoard(Graphics g, int fieldWidth, int fieldHeight, int blockWidth, int blockHeight, Block[][] board) { // draw gameBoard
         for(int x = 0; x < fieldWidth; x++) {
             for(int y = 0; y < fieldHeight; y++) {
-                board[x][y].paintBlock(g, blockWidth, blockHeight, blockArc);
+                board[x][y].paintBlock(g, blockWidth, blockHeight);
             }
         }
     }
@@ -58,11 +59,13 @@ public class GameController {
                 }
             }
         }
-       this.repaintGameBoard();
+        this.getGameStatusBoard().setBlocksCount(this.gameModel.getBlocksCount());
+        this.repaintGameBoard();
     }
 
     public void openAllBlocks() {
         this.gameModel.setAllBlocksOpen();
+        this.getGameStatusBoard().setBlocksCount(this.gameModel.getBlocksCount());
         this.repaintGameBoard();
     }
 
@@ -83,7 +86,7 @@ public class GameController {
        this.getGameBoard().repaint();
     }
 
-    private void createGameBoard() {
+    private void loadGameBoardWithBlocks() {
         this.getGameBoard().fillGameBoardWithBlocks();
         this.repaintGameBoard();
     }

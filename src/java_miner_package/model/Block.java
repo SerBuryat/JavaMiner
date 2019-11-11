@@ -1,4 +1,4 @@
-package java_miner_package.view.game_field.game_board;
+package java_miner_package.model;
 
 import java_miner_package.view.game_field.game_board.block_decorator.Counter;
 import java_miner_package.view.game_field.game_board.block_decorator.Flag;
@@ -11,6 +11,10 @@ public class Block {
     private int y;
     private int blockSizeWidth;
     private int blockSizeHeight;
+    private int blockArc = 10;
+    private Color openColor = Color.LIGHT_GRAY;
+    private Color closedColor = Color.GRAY;
+    private Color bordersColor = Color.BLACK;
     private boolean isOpen;
     private boolean hasMine;
     private boolean hasFlag;
@@ -23,22 +27,22 @@ public class Block {
         this.blockSizeHeight = blockSizeHeight;
     }
 
-    public void paintBlock(Graphics g, int blockWidth, int blockHeight, int blockArc) {
+    public void paintBlock(Graphics g, int blockWidth, int blockHeight) {
         if(this.isOpen) {
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc, blockArc);
+            g.setColor(this.openColor);
+            g.fillRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, this.blockArc, this.blockArc);
             if(this.hasMine) // has mine? -> paint mine
                 new Mine().paintBlockDecorator(g, this);
             if(this.mineCounter != 0) // has counter? -> paint counter
                 new Counter(this.mineCounter).paintBlockDecorator(g, this);
-        } else {
-            g.setColor(Color.GRAY);
-            g.fillRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc, blockArc);
+        } else { // if closed
+            g.setColor(this.closedColor);
+            g.fillRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, this.blockArc, this.blockArc);
             if(hasFlag) // has flag? -> paint flag
                 new Flag().paintBlockDecorator(g, this);
         }
-        g.setColor(Color.BLACK);
-        g.drawRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, blockArc,blockArc);
+        g.setColor(this.bordersColor);
+        g.drawRoundRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight, this.blockArc,this.blockArc);
     } // painting block
 
     public boolean isPointInBlockBounds(Point p) {
@@ -84,6 +88,10 @@ public class Block {
         return blockSizeHeight;
     }
 
+    public boolean getIsOpen() {
+        return this.isOpen;
+    }
+
     public boolean getHasMine() {
         return this.hasMine;
     }
@@ -96,12 +104,24 @@ public class Block {
         return mineCounter;
     }
 
-    public boolean getIsOpen() {
-        return this.isOpen;
-    }
-
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " " + "x - " + this.x + " : " + "y - " + this.y + " Block size : width - " + this.blockSizeWidth + " " + "height : " + this.blockSizeHeight;
+    }
+
+    public Color getBordersColor() {
+        return bordersColor;
+    }
+
+    public Color getClosedColor() {
+        return closedColor;
+    }
+
+    public Color getOpenColor() {
+        return openColor;
+    }
+
+    public int getBlockArc() {
+        return blockArc;
     }
 }

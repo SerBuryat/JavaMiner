@@ -37,7 +37,7 @@ public class GameWindow extends JFrame{
         this.gameMenu.setVisible(false);
     }
 
-    public void addAndShowGameField() {
+    public void loadGameField() {
         this.getContentPane().add(this.gameField, BorderLayout.CENTER);
     }
 

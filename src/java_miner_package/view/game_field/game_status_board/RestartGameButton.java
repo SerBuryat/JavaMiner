@@ -9,7 +9,7 @@ public class RestartGameButton extends JButton {
     public RestartGameButton() {
         this.setText("Restart game");
         this.addActionListener(action -> {
-            GameController.GAME_CONTROLLER.start(); // restart
+            GameController.GAME_CONTROLLER.gameInitialize(); // restart
         });
     }
 }

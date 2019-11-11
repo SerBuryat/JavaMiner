@@ -1,7 +1,5 @@
 package java_miner_package.model;
 
-import java_miner_package.view.game_field.game_board.Block;
-
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -31,6 +29,27 @@ public class GameModel {
         this.fillMinesFieldWithCounters(); // fill mines field with counters
     }
 
+    private void fillMinesFieldWithMines() { // fill randomly mines field with mines
+        for(int i = 0; i < this.minesCount; i++) {
+            int x_random = this.getRandomCoordinate(fieldWidthLength);
+            int y_random = this.getRandomCoordinate(fieldHeightLength);
+            while (this.minesField[x_random][y_random].getHasMine()) { // if block already has mine -> calculate another coordinate
+                x_random = this.getRandomCoordinate(fieldWidthLength);
+                y_random = this.getRandomCoordinate(fieldHeightLength);
+            }
+            this.minesField[x_random][y_random].setMine(true);
+        }
+    }
+
+    private void fillMinesFieldWithCounters() { // fiil mines field with counters
+        for(Block[] blockArr : this.minesField) {
+            for(Block block : blockArr) {
+                this.getBlockNeighbors(block);
+                this.countNearMines(block);
+            }
+        }
+    }
+
     public void setBlockOpen(Block block) {
         if(!this.isGameStopped) { // check game status
             if(!block.getIsOpen() && !block.getHasFlag()) { // check block status (!open && !flag)
@@ -40,7 +59,6 @@ public class GameModel {
                     gameOverLose();
                 } else {
                     this.blocksCount-=1; // - 1 closed block
-                    System.out.println(this.getBlocksCount());
 
                     if((this.blocksCount - this.minesCount) == 0) {// all blocks(without mines) open -> win
                         gameOverWin();
@@ -54,18 +72,11 @@ public class GameModel {
         }
     }
 
-    private void openEmptyNeighborsBlocks(Block block) { // open all empty neighbors
-            for(Block b : this.getBlockNeighbors(block)) {
-                if(!(b.getIsOpen() && b.getHasMine()))
-                    this.setBlockOpen(b);
-            }
-    }
-
     public void setAllBlocksOpen() { /// for test
         for(Block[] arr : this.minesField) {
             for(Block block : arr) {
                 block.setIsOpen(true);
-                this.blocksCount = 0;
+                this.blocksCount = this.gameParameters.getMinesCount();
             }
         }
     }
@@ -82,6 +93,13 @@ public class GameModel {
                 }
             }
         }
+    }
+
+    private void openEmptyNeighborsBlocks(Block block) { // open all empty neighbors
+            for(Block b : this.getBlockNeighbors(block)) {
+                if(!(b.getIsOpen() && b.getHasMine()))
+                    this.setBlockOpen(b);
+            }
     }
 
     private LinkedList<Block> getBlockNeighbors(Block block) { // get every 'neighbor-block' for current block
@@ -106,27 +124,6 @@ public class GameModel {
             for(Block neighbor : this.getBlockNeighbors(block)) {
                 if(neighbor.getHasMine())
                     block.setMineCounter(block.getMineCounter() + 1);
-            }
-        }
-    }
-
-    private void fillMinesFieldWithMines() { // fill randomly mines field with mines
-        for(int i = 0; i < this.minesCount; i++) {
-            int x_random = this.getRandomCoordinate(fieldWidthLength);
-            int y_random = this.getRandomCoordinate(fieldHeightLength);
-            while (this.minesField[x_random][y_random].getHasMine()) { // if block already has mine -> calculate another coordinate
-                x_random = this.getRandomCoordinate(fieldWidthLength);
-                y_random = this.getRandomCoordinate(fieldHeightLength);
-            }
-            this.minesField[x_random][y_random].setMine(true);
-        }
-    }
-
-    private void fillMinesFieldWithCounters() { // fiil mines field with counters
-        for(Block[] blockArr : this.minesField) {
-            for(Block block : blockArr) {
-                this.getBlockNeighbors(block);
-                this.countNearMines(block);
             }
         }
     }
