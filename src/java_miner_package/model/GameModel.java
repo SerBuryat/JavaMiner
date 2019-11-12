@@ -159,7 +159,19 @@ public class GameModel {
         return blocksCount;
     }
 
+    public int getMinesCount() {
+        return minesCount;
+    }
+
     public Block[][] getMinesField() {
         return minesField;
+    }
+
+    public int getFieldHeightLength() {
+        return fieldHeightLength;
+    }
+
+    public int getFieldWidthLength() {
+        return fieldWidthLength;
     }
 }

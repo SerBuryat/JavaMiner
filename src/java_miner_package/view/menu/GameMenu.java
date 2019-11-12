@@ -6,15 +6,15 @@ import java.awt.*;
 
 public class GameMenu extends JPanel  {
     private MenuStartButton menuStartButton;
-    private JButton buttonGameOptions;
-    private JButton buttonGameExit;
+    private MenuOptionsButton menuOptionsButton;
+    private MenuExitButton menuExitButton;
     private JLabel menuTitle;
 
    public GameMenu() { // initializing game start menu
 
         this.menuStartButton = new MenuStartButton();
-        this.buttonGameOptions = new JButton("Options");
-        this.buttonGameExit = new ExitGameButton();
+        this.menuOptionsButton = new MenuOptionsButton();
+        this.menuExitButton = new MenuExitButton();
         this.menuTitle = new JLabel("Java Miner");
 
 
@@ -30,8 +30,8 @@ public class GameMenu extends JPanel  {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         JPanel buttons = new JPanel(new GridBagLayout());
         buttons.add(menuStartButton, gbc);
-        buttons.add(buttonGameOptions, gbc);
-        buttons.add(buttonGameExit, gbc);
+        buttons.add(menuOptionsButton, gbc);
+        buttons.add(menuExitButton, gbc);
         gbc.weighty = 1;
         this.add(buttons, gbc);
     }

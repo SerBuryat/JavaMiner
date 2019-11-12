@@ -21,7 +21,7 @@ public class GameBoard extends JPanel {
         this.countCellsWidth = countCellsWidth;
         this.countCellsHeight = countCellsHeight;
 
-        this.gamePaintBoard = new DrawBlock[countCellsWidth][countCellsHeight]; // create the game board array
+        this.gamePaintBoard = new DrawBlock[countCellsWidth][countCellsHeight]; // create the game paint board
 
         addMouseListener(new MouseControl()); // set mouse control on this board
     }
@@ -43,14 +43,14 @@ public class GameBoard extends JPanel {
         return  this.height / this.countCellsHeight;
     }
 
-    public void loadGamePaintBoard() {
-        Block[][] minesField = GameController.GAME_CONTROLLER.getGameModel().getMinesField();
-        for(int x = 0; x < countCellsWidth; x++) {
-            for(int y = 0; y < countCellsHeight; y++) {
+    public void loadGameBoard(int width, int height, Block[][] minesField) {
+        this.countCellsWidth = width;
+        this.countCellsHeight = height;
+        this.gamePaintBoard = new DrawBlock[width][height];
+        for(int x = 0; x < width; x++) {
+            for(int y = 0; y < height; y++) {
                 this.gamePaintBoard[x][y] = new DrawBlock(minesField[x][y], getBlockWidth(), getBlockHeight());
             }
         }
     }
-
-
 }

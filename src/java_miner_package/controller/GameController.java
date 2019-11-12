@@ -2,7 +2,6 @@ package java_miner_package.controller;
 
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
-import java_miner_package.model.Player;
 import java_miner_package.view.game_field.game_board.GameBoard;
 import java_miner_package.view.game_field.game_board.DrawBlock;
 import java_miner_package.view.game_field.game_status_board.GameStatusBoard;
@@ -16,35 +15,24 @@ public class GameController {
     private GameWindow gameWindow;
     private GameParameters gameParameters;
     private GameModel gameModel;
-    private Player player;
 
     public GameController() {
         this.gameParameters = new GameParameters(); // default game parameters (15 x 15 table , 25 mines) or can create manually
     }
 
-    public void loadGameWindow() { // initializing game parameters
+    public void loadGameWindow() { // load main frame -> game window
         this.gameWindow = new GameWindow();
     }
 
-    public void gameInitialize() {
-        this.gameModel = new GameModel(this.gameParameters); // create and start game
+    public void gameInitialize() { // initializing game parameters
+        this.gameModel = new GameModel(this.gameParameters);
         this.gameModel.gameStart();
-
-        this.player = new Player(this.gameParameters);
-
-        this.loadGamePaintBoard(); // load paint board
-
+        this.loadGameBoard(); // load game board
         this.getGameStatusBoard().setFlagsCount(this.gameModel.getFlagsCount());
         this.getGameStatusBoard().setBlocksCount(this.gameModel.getBlocksCount());
+        this.getGameStatusBoard().setMinesCount(this.gameModel.getMinesCount());
     }
 
-    public GameParameters getGameParameters() {
-        return this.gameParameters;
-    }
-
-    public GameBoard getGameBoard() {
-        return this.gameWindow.getGameField().getGameBoard();
-    }
 
     public void paintGameBoard(Graphics g, int fieldWidth, int fieldHeight, int blockWidth, int blockHeight, DrawBlock[][] board) { // draw gameBoard
         for(int x = 0; x < fieldWidth; x++) {
@@ -54,7 +42,22 @@ public class GameController {
         }
     }
 
-    public void openBlock(Point p) {
+    private void repaintGameBoard() {
+        this.getGameBoard().repaint();
+    }
+
+    private void loadGameBoard() {
+        int width = this.gameModel.getFieldWidthLength();
+        int height = this.gameModel.getFieldHeightLength();
+        this.getGameBoard().loadGameBoard(width, height, this.getGameModel().getMinesField());
+    }
+
+    private GameBoard getGameBoard() {
+        return this.gameWindow.getGameField().getGameBoard();
+    }
+
+
+    void openBlock(Point p) {
         for(DrawBlock[] arr : this.getGameBoard().getGamePaintBoard()) {
             for(DrawBlock drawBlock : arr) {
                 if(drawBlock.isPointInBlockBounds(p)) {
@@ -66,13 +69,13 @@ public class GameController {
         this.repaintGameBoard();
     }
 
-    public void openAllBlocks() {
+    void openAllBlocks() {
         this.gameModel.setAllBlocksOpen();
         this.getGameStatusBoard().setBlocksCount(this.gameModel.getBlocksCount());
         this.repaintGameBoard();
     }
 
-    public void setFlag(Point p) {
+    void setFlag(Point p) {
         for(DrawBlock[] arr : this.getGameBoard().getGamePaintBoard()) {
             for(DrawBlock drawBlock : arr) {
                 if(drawBlock.isPointInBlockBounds(p)) {
@@ -85,24 +88,24 @@ public class GameController {
         this.repaintGameBoard();
     }
 
-    public void repaintGameBoard() {
-       this.getGameBoard().repaint();
-    }
-
-    private void loadGamePaintBoard() {
-        this.getGameBoard().loadGamePaintBoard();
-        this.repaintGameBoard();
-    }
 
     public GameWindow getGameWindow() {
         return gameWindow;
     }
 
-    public GameStatusBoard getGameStatusBoard() {
+    private GameStatusBoard getGameStatusBoard() {
         return this.getGameWindow().getGameField().getGameStatusBoard();
     }
 
-    public GameModel getGameModel() {
+    private GameModel getGameModel() {
         return gameModel;
+    }
+
+    public GameParameters getGameParameters() {
+        return this.gameParameters;
+    }
+
+    public void setGameParameters(GameParameters gameParameters) {
+        this.gameParameters = gameParameters;
     }
 }

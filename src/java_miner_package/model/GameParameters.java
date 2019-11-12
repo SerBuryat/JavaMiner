@@ -42,4 +42,16 @@ public class GameParameters {
     public int getBlocksCount() {
         return blocksCount;
     }
+
+    public void setCellsCountWidth(int cellsCountWidth) {
+        this.cellsCountWidth = cellsCountWidth;
+    }
+
+    public void setCellsCountHeight(int cellsCountHeight) {
+        this.cellsCountHeight = cellsCountHeight;
+    }
+
+    public void setMinesCount(int minesCount) {
+        this.minesCount = minesCount;
+    }
 }
