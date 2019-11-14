@@ -2,11 +2,11 @@ package java_miner_package.model;
 
 public class GameParameters {
 
-    private int cellsCountWidth;
-    private int cellsCountHeight;
-    private int flagsCount;
-    private int minesCount;
-    private int blocksCount;
+    private final int cellsCountWidth;
+    private final int cellsCountHeight;
+    private final int flagsCount;
+    private final int minesCount;
+    private final int blocksCount;
 
     public GameParameters() { // default parameters constructor (15x15 table, 25 mines, 25 flags)
         this.cellsCountWidth = 15;
@@ -21,6 +21,7 @@ public class GameParameters {
         this.cellsCountHeight = countCellsHeight;
         this.minesCount = minesCount;
         this.flagsCount = this.minesCount;
+        this.blocksCount = this.cellsCountWidth * this.cellsCountHeight;
     }
 
     public int getCellsCountHeight() {
@@ -39,19 +40,7 @@ public class GameParameters {
         return minesCount;
     }
 
-    public int getBlocksCount() {
+    public int getCellsCount() {
         return blocksCount;
-    }
-
-    public void setCellsCountWidth(int cellsCountWidth) {
-        this.cellsCountWidth = cellsCountWidth;
-    }
-
-    public void setCellsCountHeight(int cellsCountHeight) {
-        this.cellsCountHeight = cellsCountHeight;
-    }
-
-    public void setMinesCount(int minesCount) {
-        this.minesCount = minesCount;
     }
 }

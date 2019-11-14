@@ -1,31 +1,31 @@
 package java_miner_package.model;
 
-public class Block {
-    private int x;
-    private int y;
+public class Cell {
+    private final int x;
+    private final int y;
     private boolean isOpen;
     private boolean hasMine;
     private boolean hasFlag;
     private int mineCounter;
 
-    public Block(int x, int y) {
+    Cell(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void setIsOpen(boolean open) {
+    void setIsOpen(boolean open) {
         this.isOpen = open;
     }
 
-    public void setFlag(boolean hasFlag) {
+    void setFlag(boolean hasFlag) {
         this.hasFlag = hasFlag;
     }
 
-    public void setMine(boolean hasMine) {
+    void setMine(boolean hasMine) {
         this.hasMine = hasMine;
     }
 
-    public void setMineCounter(int mineCounter) {
+    void setMineCounter(int mineCounter) {
         this.mineCounter = mineCounter;
     }
 

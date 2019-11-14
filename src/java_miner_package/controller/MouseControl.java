@@ -11,10 +11,10 @@ public class MouseControl implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON1) {
             Point p = e.getPoint();
-            GameController.GAME_CONTROLLER.openBlock(p);
+            GameController.GAME_CONTROLLER.openCell(p);
         }
         if(e.getButton() == MouseEvent.BUTTON2) {
-            GameController.GAME_CONTROLLER.openAllBlocks(); // test
+            GameController.GAME_CONTROLLER.openAllCells(); // test
         }
         if(e.getButton() == MouseEvent.BUTTON3) {
             Point p = e.getPoint();

@@ -1,17 +1,12 @@
-package java_miner_package.view.options;
+package java_miner_package.view.options_panel;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 class JTextFieldLimit extends PlainDocument {
-    private int limit;
+    private final int limit;
     JTextFieldLimit(int limit) {
-        super();
-        this.limit = limit;
-    }
-
-    JTextFieldLimit(int limit, boolean upper) {
         super();
         this.limit = limit;
     }

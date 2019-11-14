@@ -1,39 +1,37 @@
-package java_miner_package.view.game_field.game_status_board;
+package java_miner_package.view.game_panel.game_status_panel;
 
 import java_miner_package.model.GameParameters;
-import java_miner_package.view.game_field.game_board.block_decorator.DecoratorImageResources;
-import java_miner_package.view.game_field.game_board.DrawBlock;
+import java_miner_package.view.game_panel.game_mines_field_panel.block_decorator.DecoratorImageResources;
+import java_miner_package.view.game_panel.game_mines_field_panel.DrawCell;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GameStatusBoard extends JPanel {
-    private JLabel flagsCount;
-    private JLabel minesCount;
-    private JLabel blocksCount;
-    private Font font;
-    private int fontSize = 22;
-    private int iconSize = 30;
+    private final JLabel flagsCount;
+    private final JLabel minesCount;
+    private final JLabel cellsCount;
+    private final int fontSize = 22;
+    private final int iconSize = 30;
 
     public GameStatusBoard(GameParameters gameParameters) { // not a flexible panel, need to regroup a panel after make changes
-        this.font = new Font("Serif", Font.PLAIN, this.fontSize);
-
-        this.flagsCount = this.labelCreator("x " + gameParameters.getFlagsCount(), DecoratorImageResources.FLAG, this.font);
-        this.minesCount = this.labelCreator("x " + gameParameters.getMinesCount(), DecoratorImageResources.MINE, this.font);
-        this.blocksCount = this.labelCreator("x " + gameParameters.getBlocksCount(), this.font);
+        Font font = new Font("Serif", Font.PLAIN, this.fontSize);
+        this.flagsCount = this.labelCreator("x " + gameParameters.getFlagsCount(), DecoratorImageResources.FLAG, font);
+        this.minesCount = this.labelCreator("x " + gameParameters.getMinesCount(), DecoratorImageResources.MINE, font);
+        this.cellsCount = this.labelCreator("x " + gameParameters.getCellsCount(), font);
 
         this.setLayout(new GridLayout(4,1)); // change if need more components in status bar
         this.add(this.flagsCount);
         this.add(this.minesCount);
-        this.add(this.blocksCount);
+        this.add(this.cellsCount);
     }
 
     public void setFlagsCount(int flagsCount) {
         this.flagsCount.setText("x " + flagsCount);
     }
 
-    public void setBlocksCount(int blocksCount) {
-        this.blocksCount.setText("x " + blocksCount);
+    public void setCellsCount(int blocksCount) {
+        this.cellsCount.setText("x " + blocksCount);
     }
 
     public void setMinesCount(int minesCount) {
@@ -62,10 +60,10 @@ public class GameStatusBoard extends JPanel {
     @Override
     public void paintComponent(Graphics g) { // drawing icon block
         super.paintComponent(g);
-        DrawBlock drawBlock = new DrawBlock(this.blocksCount.getX(), this.blocksCount.getY() + this.fontSize, this.iconSize, this.iconSize);
+        DrawCell drawBlock = new DrawCell(this.cellsCount.getX(), this.cellsCount.getY() + this.fontSize, this.iconSize, this.iconSize);
         g.setColor(drawBlock.getClosedColor());
-        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getBlockSizeWidth(), drawBlock.getBlockSizeHeight(), drawBlock.getBlockArc(), drawBlock.getBlockArc());
+        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellSizeWidth(), drawBlock.getCellSizeHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
         g.setColor(drawBlock.getBordersColor());
-        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getBlockSizeWidth(), drawBlock.getBlockSizeHeight(), drawBlock.getBlockArc(), drawBlock.getBlockArc());
+        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellSizeWidth(), drawBlock.getCellSizeHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
     }
 }
