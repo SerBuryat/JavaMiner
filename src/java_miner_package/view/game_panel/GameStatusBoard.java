@@ -1,40 +1,37 @@
-package java_miner_package.view.game_panel.game_status_panel;
+package java_miner_package.view.game_panel;
 
-import java_miner_package.model.GameParameters;
-import java_miner_package.view.game_panel.game_mines_field_panel.block_decorator.DecoratorImageResources;
-import java_miner_package.view.game_panel.game_mines_field_panel.DrawCell;
+import java_miner_package.model.GameModel;
+import java_miner_package.model.ModelObserver;
+import java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator.DecoratorImageResources;
+import java_miner_package.view.game_panel.game_paint_board_panel.DrawCell;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GameStatusBoard extends JPanel {
+public class GameStatusBoard extends JPanel implements ModelObserver {
     private final JLabel flagsCount;
     private final JLabel minesCount;
     private final JLabel cellsCount;
     private final int fontSize = 22;
     private final int iconSize = 30;
 
-    public GameStatusBoard(GameParameters gameParameters) { // not a flexible panel, need to regroup a panel after make changes
+    GameStatusBoard(GameModel gameModel) { // not a flexible panel, need to regroup a panel after making changes
         Font font = new Font("Serif", Font.PLAIN, this.fontSize);
-        this.flagsCount = this.labelCreator("x " + gameParameters.getFlagsCount(), DecoratorImageResources.FLAG, font);
-        this.minesCount = this.labelCreator("x " + gameParameters.getMinesCount(), DecoratorImageResources.MINE, font);
-        this.cellsCount = this.labelCreator("x " + gameParameters.getCellsCount(), font);
+        this.flagsCount = this.labelCreator("x " + gameModel.getFlagsCount(), DecoratorImageResources.FLAG, font);
+        this.minesCount = this.labelCreator("x " + gameModel.getMinesCount(), DecoratorImageResources.MINE, font);
+        this.cellsCount = this.labelCreator("x " + gameModel.getCellsCount(), font);
 
         this.setLayout(new GridLayout(4,1)); // change if need more components in status bar
         this.add(this.flagsCount);
         this.add(this.minesCount);
         this.add(this.cellsCount);
+        gameModel.registerObserver(this);
     }
 
-    public void setFlagsCount(int flagsCount) {
+    @Override
+    public void setChanges(int cellsCount, int flagsCount, int minesCount, int fieldWidth, int fieldHeight) {
         this.flagsCount.setText("x " + flagsCount);
-    }
-
-    public void setCellsCount(int blocksCount) {
-        this.cellsCount.setText("x " + blocksCount);
-    }
-
-    public void setMinesCount(int minesCount) {
+        this.cellsCount.setText("x " + cellsCount);
         this.minesCount.setText("x " + minesCount);
     }
 

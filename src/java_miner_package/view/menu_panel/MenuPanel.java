@@ -1,6 +1,6 @@
 package java_miner_package.view.menu_panel;
 
-import java_miner_package.controller.GameController;
+import java_miner_package.view.MainWindow;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -8,16 +8,16 @@ import java.awt.*;
 
 public class MenuPanel extends JPanel  {
 
-    public MenuPanel() { // initializing game start menu
+    public MenuPanel(MainWindow mainWindow) { // initializing game start menu
 
        JButton menuStartButton = new JButton("Start game");
         menuStartButton.addActionListener(action -> {
-            GameController.GAME_CONTROLLER.getMainWindow().loadGamePanel();
-            GameController.GAME_CONTROLLER.gameInitializing();
+            mainWindow.loadGamePanel();
+            mainWindow.getGameController().startGame();
         });
 
         JButton menuOptionsButton = new JButton("Options");
-        menuOptionsButton.addActionListener(action -> GameController.GAME_CONTROLLER.getMainWindow().loadOptionsPanel());
+        menuOptionsButton.addActionListener(action -> mainWindow.loadOptionsPanel());
 
         JButton menuExitButton = new JButton("Exit");
         menuExitButton.addActionListener(action -> System.exit(1));

@@ -1,7 +1,7 @@
 package java_miner_package.view.options_panel;
 
-import java_miner_package.controller.GameController;
 import java_miner_package.model.GameParameters;
+import java_miner_package.view.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,11 @@ public class OptionsPanel extends JPanel {
     private final JTextField minesCountTextField;
     private final Font font = new Font("Serif", Font.PLAIN, 40);
 
-    public OptionsPanel() {
+    public OptionsPanel(MainWindow mainWindow) {
         JLabel fieldWidthLabel = new JLabel("WIDTH:"); // labels
         JLabel fieldHeightLabel = new JLabel("HEIGHT:");
         JLabel minesCountLabel = new JLabel("MINES COUNT:");
+
         this.fieldWidthTextField = this.createTextFieldWithCharLimit(2); // limited text fields
         this.fieldHeightTextField = this.createTextFieldWithCharLimit(2);
         this.minesCountTextField = this.createTextFieldWithCharLimit(3);
@@ -32,17 +33,17 @@ public class OptionsPanel extends JPanel {
             int minesCount = Integer.parseInt(this.minesCountTextField.getText()); // mines count
             GameParameters newGameParameters = new GameParameters(width, height, minesCount);
 
-            GameController.GAME_CONTROLLER.setGameParameters(newGameParameters); // load new game parameters
-            GameController.GAME_CONTROLLER.getMainWindow().loadGamePanel();// load game field
-            GameController.GAME_CONTROLLER.gameInitializing();// initializing game
+            mainWindow.getGameController().setGameParameters(newGameParameters); // load new game parameters
+            mainWindow.loadGamePanel();// load game field
+            mainWindow.getGameController().startGame();// initializing game
         });
 
         JButton cancelOptionsButton = new JButton("CANCEL");
         cancelOptionsButton.addActionListener(action -> { // back to menu
-            GameController.GAME_CONTROLLER.getMainWindow().loadMenuPanel();
+            mainWindow.loadMenuPanel();
         });
 
-        this.addComponentsInGridTableByPairs(fieldWidthLabel, this.fieldWidthTextField); // left argument -> to left cell of table ... right -> to right
+        this.addComponentsInGridTableByPairs(fieldWidthLabel, this.fieldWidthTextField); // left argument -> to left cell of grid table ... right -> to right
         this.addComponentsInGridTableByPairs(fieldHeightLabel, this.fieldHeightTextField);
         this.addComponentsInGridTableByPairs(minesCountLabel, this.minesCountTextField);
         this.addComponentsInGridTableByPairs(applyOptionsButton, cancelOptionsButton);
@@ -67,5 +68,4 @@ public class OptionsPanel extends JPanel {
         this.add(left);
         this.add(right);
     }
-
 }

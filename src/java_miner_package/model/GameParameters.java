@@ -32,15 +32,15 @@ public class GameParameters {
         return cellsCountWidth;
     }
 
-    public int getFlagsCount() {
+    int getFlagsCount() {
         return flagsCount;
     }
 
-    public int getMinesCount() {
+    int getMinesCount() {
         return minesCount;
     }
 
-    public int getCellsCount() {
+    int getCellsCount() {
         return blocksCount;
     }
 }

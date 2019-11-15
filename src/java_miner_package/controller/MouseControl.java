@@ -5,20 +5,24 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class MouseControl implements MouseListener {
-    
+    private final GameController gameController;
+
+    public MouseControl(GameController gameController) {
+        this.gameController = gameController;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getButton() == MouseEvent.BUTTON1) {
             Point p = e.getPoint();
-            GameController.GAME_CONTROLLER.openCell(p);
+            this.gameController.openCell(p);
         }
         if(e.getButton() == MouseEvent.BUTTON2) {
-            GameController.GAME_CONTROLLER.openAllCells(); // test
+            this.gameController.openAllCells(); // test
         }
         if(e.getButton() == MouseEvent.BUTTON3) {
             Point p = e.getPoint();
-            GameController.GAME_CONTROLLER.setFlag(p);
+            this.gameController.setFlag(p);
         }
     }
 

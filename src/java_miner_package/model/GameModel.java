@@ -1,33 +1,31 @@
 package java_miner_package.model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class GameModel {
-    private final GameParameters gameParameters;
-    private final Cell[][] minesField;
-    private int cellCount;
+public class GameModel implements ModelSubjectForObservers{
+    private GameParameters gameParameters;
+    private Cell[][] minesField;
+    private int cellsCount;
     private int flagsCount;
-    private final int minesCount;
-    private final int fieldWidth;
-    private final int fieldHeight;
+    private int minesCount;
+    private int fieldWidth;
+    private int fieldHeight;
     private boolean isGameStopped;
+    private final ArrayList<ModelObserver> observers;
 
     public GameModel(GameParameters gameParameters) {
-        this.gameParameters = gameParameters;
-        this.minesField = new Cell[this.gameParameters.getCellsCountWidth()][this.gameParameters.getCellsCountHeight()];
-        this.minesCount = this.gameParameters.getMinesCount();
-        this.flagsCount = this.minesCount;
-        this.fieldWidth = this.gameParameters.getCellsCountWidth();
-        this.fieldHeight = this.gameParameters.getCellsCountHeight();
-        this.cellCount = this.fieldWidth * this.fieldHeight;
-        this.isGameStopped = false;
+        isGameStopped = false;
+        observers = new ArrayList<>();
+        this.setGameParameters(gameParameters);
     }
 
-    public void gameStart() {
+    public void createMinesField() {
         this.fillMinesFieldWithCells(); // fill mines field with blocks
         this.fillMinesFieldWithMines(); //  with mines
         this.fillMinesFieldWithCounters(); // with counters
+        this.isGameStopped = false;
     }
 
     private void fillMinesFieldWithCells() {
@@ -67,9 +65,9 @@ public class GameModel {
                 if(cell.getHasMine()) {// mine picked -> lose
                     gameOverLose();
                 } else {
-                    this.cellCount -=1; // - 1 closed cell
+                    this.setCellsCount(cellsCount -=1); // - 1 closed cell
 
-                    if((this.cellCount - this.minesCount) == 0) {// all blocks(without mines) open -> win
+                    if((this.cellsCount - this.minesCount) == 0) {// all blocks(without mines) open -> win
                         gameOverWin();
                         return;
                     }
@@ -85,7 +83,7 @@ public class GameModel {
         for(Cell[] arr : this.minesField) {
             for(Cell cell : arr) {
                 cell.setIsOpen(true);
-                this.cellCount = this.gameParameters.getMinesCount();
+                this.setCellsCount(cellsCount = this.gameParameters.getMinesCount());
             }
         }
     }
@@ -94,11 +92,12 @@ public class GameModel {
         if(!this.isGameStopped) {
             if(cell.getHasFlag()) {
                 cell.setFlag(false);
-                this.flagsCount+=1;
+                this.setFlagsCount(flagsCount+=1);
             } else {
                 if(this.flagsCount > 0 && !cell.getIsOpen()) {
                     cell.setFlag(true);
                     this.flagsCount-=1;
+                    this.notifyObservers();
                 }
             }
         }
@@ -155,8 +154,8 @@ public class GameModel {
         return flagsCount;
     }
 
-    public int getCellCount() {
-        return cellCount;
+    public int getCellsCount() {
+        return cellsCount;
     }
 
     public int getMinesCount() {
@@ -167,11 +166,49 @@ public class GameModel {
         return minesField;
     }
 
-    public int getFieldHeight() {
-        return fieldHeight;
+    private void setFlagsCount(int flagsCount) {
+        this.flagsCount = flagsCount;
+        this.notifyObservers();
     }
 
-    public int getFieldWidth() {
-        return fieldWidth;
+    private void setCellsCount(int cellsCount) {
+        this.cellsCount = cellsCount;
+        this.notifyObservers();
+    }
+
+    private void setMinesCount(int minesCount) {
+        this.minesCount = minesCount;
+        this.notifyObservers();
+    }
+
+    private void setFieldSize(int fieldWidth, int fieldHeight) {
+        this.fieldWidth = fieldWidth;
+        this.fieldHeight = fieldHeight;
+        this.notifyObservers();
+    }
+
+    public void setGameParameters(GameParameters gameParameters) {
+        this.gameParameters = gameParameters;
+        this.minesField = new Cell[gameParameters.getCellsCountWidth()][gameParameters.getCellsCountHeight()];
+        this.setFieldSize(gameParameters.getCellsCountWidth(), gameParameters.getCellsCountHeight());
+        this.setCellsCount(gameParameters.getCellsCount());
+        this.setFlagsCount(gameParameters.getFlagsCount());
+        this.setMinesCount(gameParameters.getMinesCount());
+    }
+
+    @Override
+    public void registerObserver(ModelObserver observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void deleteObserver(ModelObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(ModelObserver observer : this.observers)
+            observer.setChanges(this.cellsCount, this.flagsCount, this.minesCount, this.fieldWidth, this.fieldHeight);
     }
 }
