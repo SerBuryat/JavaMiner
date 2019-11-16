@@ -44,6 +44,7 @@ public class OptionsPanel extends JPanel {
         });
 
         this.addComponentsInGridTableByPairs(fieldWidthLabel, this.fieldWidthTextField); // left argument -> to left cell of grid table ... right -> to right
+        // noinspection SuspiciousNameCombination
         this.addComponentsInGridTableByPairs(fieldHeightLabel, this.fieldHeightTextField);
         this.addComponentsInGridTableByPairs(minesCountLabel, this.minesCountTextField);
         this.addComponentsInGridTableByPairs(applyOptionsButton, cancelOptionsButton);

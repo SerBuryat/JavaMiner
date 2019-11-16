@@ -2,57 +2,65 @@ package java_miner_package.view.game_panel.game_paint_board_panel;
 
 import java_miner_package.controller.MouseControl;
 import java_miner_package.model.Cell;
+import java_miner_package.model.ModelObserver;
 import java_miner_package.view.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePaintBoard extends JPanel {
+public class GamePaintBoard extends JPanel implements ModelObserver {
     private final int paintBoardWidth;
     private final int paintBoardHeight;
-    private int countCellsWidth;
-    private int countCellsHeight;
-    private DrawCell[][] paintBoard;
+    private int fieldWidth;
+    private int fieldHeight;
+    private DrawingCell[][] paintBoardField;
 
     public GamePaintBoard(MainWindow mainWindow) {
-        this.paintBoardWidth = 700;//test
-        this.paintBoardHeight = 700;//test
+        this.paintBoardWidth = 700;
+        this.paintBoardHeight = 700;
         this.setSize(this.paintBoardWidth, this.paintBoardHeight);
-        this.countCellsWidth = mainWindow.getGameController().getGameParameters().getCellsCountWidth(); // width from game parameters
-        this.countCellsHeight = mainWindow.getGameController().getGameParameters().getCellsCountHeight(); // height from game parameters
-        this.paintBoard = new DrawCell[countCellsWidth][countCellsHeight];
+        this.fieldWidth = mainWindow.getGameController().getGameParameters().getMinesFieldWidth();
+        this.fieldHeight = mainWindow.getGameController().getGameParameters().getMinesFieldHeight();
+        this.paintBoardField = new DrawingCell[fieldWidth][fieldHeight];
+
         this.addMouseListener(new MouseControl(mainWindow.getGameController())); // set mouse control on this board
+
+        mainWindow.getGameModel().registerObserver(this);
     }
 
     public void paint(Graphics g) { // drawing pain board
         super.paint(g);
-        for(int x = 0; x < this.countCellsWidth; x++) {
-            for(int y = 0; y < this.countCellsHeight; y++) {
-                this.paintBoard[x][y].paintDrawCell(g, this.getDrawCellWidth(), this.getDrawCellHeight());
+        for(int x = 0; x < this.fieldWidth; x++) {
+            for(int y = 0; y < this.fieldHeight; y++) {
+                this.paintBoardField[x][y].paintDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
             }
         }
     }
 
-    public DrawCell[][] getPaintBoard() {
-        return paintBoard;
+    public DrawingCell[][] getPaintBoardField() {
+        return paintBoardField;
     }
 
-    private int getDrawCellWidth() {
-        return  this.paintBoardWidth / this.countCellsWidth;
+    private int getDrawingCellWidth() {
+        return  this.paintBoardWidth / this.fieldWidth;
     }
 
-    private int getDrawCellHeight() {
-        return  this.paintBoardHeight / this.countCellsHeight;
+    private int getDrawingCellHeight() {
+        return  this.paintBoardHeight / this.fieldHeight;
     }
 
-    public void loadPaintBoard(int width, int height, Cell[][] minesField) { // fill paint board with DrawCell
-        this.countCellsWidth = width;
-        this.countCellsHeight = height;
-        this.paintBoard = new DrawCell[width][height];
-        for(int x = 0; x < width; x++) {
-            for(int y = 0; y < height; y++) {
-                this.paintBoard[x][y] = new DrawCell(minesField[x][y], getDrawCellWidth(), getDrawCellHeight());
+    public void loadPaintBoard(Cell[][] minesField) { // fill paint board with DrawCell
+        this.paintBoardField = new DrawingCell[this.fieldWidth][this.fieldHeight];
+        for(int x = 0; x < this.fieldWidth; x++) {
+            for(int y = 0; y < this.fieldHeight; y++) {
+                this.paintBoardField[x][y] = new DrawingCell(minesField[x][y], getDrawingCellWidth(), getDrawingCellHeight());
             }
         }
+    }
+
+    @Override
+    public void setGameModelChanges(int cellsCount, int flagsCount, int minesCount, int fieldWidth, int fieldHeight) {
+        this.fieldWidth = fieldWidth;
+        this.fieldHeight = fieldHeight;
     }
 }

@@ -1,9 +1,10 @@
 package java_miner_package.view.game_panel;
 
+import java_miner_package.model.Cell;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.ModelObserver;
 import java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator.DecoratorImageResources;
-import java_miner_package.view.game_panel.game_paint_board_panel.DrawCell;
+import java_miner_package.view.game_panel.game_paint_board_panel.DrawingCell;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,7 @@ public class GameStatusBoard extends JPanel implements ModelObserver {
     }
 
     @Override
-    public void setChanges(int cellsCount, int flagsCount, int minesCount, int fieldWidth, int fieldHeight) {
+    public void setGameModelChanges(int cellsCount, int flagsCount, int minesCount, int fieldWidth, int fieldHeight) {
         this.flagsCount.setText("x " + flagsCount);
         this.cellsCount.setText("x " + cellsCount);
         this.minesCount.setText("x " + minesCount);
@@ -57,10 +58,11 @@ public class GameStatusBoard extends JPanel implements ModelObserver {
     @Override
     public void paintComponent(Graphics g) { // drawing icon block
         super.paintComponent(g);
-        DrawCell drawBlock = new DrawCell(this.cellsCount.getX(), this.cellsCount.getY() + this.fontSize, this.iconSize, this.iconSize);
+
+        DrawingCell drawBlock = new DrawingCell(new Cell(this.cellsCount.getX(), this.cellsCount.getY() + this.fontSize), this.iconSize, this.iconSize);
         g.setColor(drawBlock.getClosedColor());
-        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellSizeWidth(), drawBlock.getCellSizeHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
+        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellWidth(), drawBlock.getCellHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
         g.setColor(drawBlock.getBordersColor());
-        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellSizeWidth(), drawBlock.getCellSizeHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
+        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellWidth(), drawBlock.getCellHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
     }
 }

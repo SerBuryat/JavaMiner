@@ -8,21 +8,21 @@ public class Cell {
     private boolean hasFlag;
     private int mineCounter;
 
-    Cell(int x, int y) {
+    public Cell(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    void setIsOpen(boolean open) {
-        this.isOpen = open;
+    void setOpen() {
+        this.isOpen = true;
     }
 
     void setFlag(boolean hasFlag) {
         this.hasFlag = hasFlag;
     }
 
-    void setMine(boolean hasMine) {
-        this.hasMine = hasMine;
+    void setMine() {
+        this.hasMine = true;
     }
 
     void setMineCounter(int mineCounter) {

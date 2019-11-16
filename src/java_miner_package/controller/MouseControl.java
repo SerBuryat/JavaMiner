@@ -18,7 +18,7 @@ public class MouseControl implements MouseListener {
             this.gameController.openCell(p);
         }
         if(e.getButton() == MouseEvent.BUTTON2) {
-            this.gameController.openAllCells(); // test
+            this.gameController.openAllCells();
         }
         if(e.getButton() == MouseEvent.BUTTON3) {
             Point p = e.getPoint();

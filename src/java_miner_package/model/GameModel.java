@@ -12,16 +12,14 @@ public class GameModel implements ModelSubjectForObservers{
     private int minesCount;
     private int fieldWidth;
     private int fieldHeight;
-    private boolean isGameStopped;
-    private final ArrayList<ModelObserver> observers;
+    private boolean isGameStopped = false;
+    private final ArrayList<ModelObserver> observers = new ArrayList<>();
 
     public GameModel(GameParameters gameParameters) {
-        isGameStopped = false;
-        observers = new ArrayList<>();
         this.setGameParameters(gameParameters);
     }
 
-    public void createMinesField() {
+    public void loadMinesField() {
         this.fillMinesFieldWithCells(); // fill mines field with blocks
         this.fillMinesFieldWithMines(); //  with mines
         this.fillMinesFieldWithCounters(); // with counters
@@ -29,8 +27,8 @@ public class GameModel implements ModelSubjectForObservers{
     }
 
     private void fillMinesFieldWithCells() {
-        for(int x = 0; x < this.gameParameters.getCellsCountWidth(); x++) {
-            for(int y = 0; y < this.gameParameters.getCellsCountHeight(); y++) {
+        for(int x = 0; x < this.fieldWidth; x++) {
+            for(int y = 0; y < this.fieldHeight; y++) {
                 this.minesField[x][y] = new Cell(x, y);
             }
         }
@@ -44,7 +42,7 @@ public class GameModel implements ModelSubjectForObservers{
                 x_random = this.getRandomCoordinate(fieldWidth);
                 y_random = this.getRandomCoordinate(fieldHeight);
             }
-            this.minesField[x_random][y_random].setMine(true);
+            this.minesField[x_random][y_random].setMine();
         }
     }
 
@@ -57,17 +55,17 @@ public class GameModel implements ModelSubjectForObservers{
         }
     }
 
-    public void setCellOpen(Cell cell) {
-        if(!this.isGameStopped) { // check game status
-            if(!cell.getIsOpen() && !cell.getHasFlag()) { // check cell status (!open && !flag)
-                cell.setIsOpen(true); // open this cell
+    public void openCell(Cell cell) {
+        if(!this.isGameStopped) {
+            if(!cell.getIsOpen() && !cell.getHasFlag()) {
+                cell.setOpen();
+                this.setCellsCount(cellsCount -=1);
 
-                if(cell.getHasMine()) {// mine picked -> lose
+                if(cell.getHasMine()) {
                     gameOverLose();
                 } else {
-                    this.setCellsCount(cellsCount -=1); // - 1 closed cell
 
-                    if((this.cellsCount - this.minesCount) == 0) {// all blocks(without mines) open -> win
+                    if((this.cellsCount - this.minesCount) == 0) {
                         gameOverWin();
                         return;
                     }
@@ -79,16 +77,16 @@ public class GameModel implements ModelSubjectForObservers{
         }
     }
 
-    public void setAllCellsOpen() { /// for test
+    public void openAllCells() { /// for test
         for(Cell[] arr : this.minesField) {
             for(Cell cell : arr) {
-                cell.setIsOpen(true);
+                cell.setOpen();
                 this.setCellsCount(cellsCount = this.gameParameters.getMinesCount());
             }
         }
     }
 
-    public void setFlagOnBlock(Cell cell) { // or delete it if block already has it
+    public void setFlagOnCell(Cell cell) { // or delete it if block already has it
         if(!this.isGameStopped) {
             if(cell.getHasFlag()) {
                 cell.setFlag(false);
@@ -106,7 +104,7 @@ public class GameModel implements ModelSubjectForObservers{
     private void openEmptyNeighborsCells(Cell cell) { // open all empty neighbors
             for(Cell b : this.getCellNeighbors(cell)) {
                 if(!(b.getIsOpen() && b.getHasMine()))
-                    this.setCellOpen(b);
+                    this.openCell(b);
             }
     }
 
@@ -142,12 +140,13 @@ public class GameModel implements ModelSubjectForObservers{
 
     private void gameOverWin() {
         this.isGameStopped = true;
-        System.out.println("Game is over. You WIN!");
+        MessageToUser.getMessage("Congratulations! You WIN! All " + (this.gameParameters.getCellsCount() - this.minesCount) +  " cells is open!"
+                + "\n" +  "Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
     private void gameOverLose() {
         this.isGameStopped = true;
-        System.out.println("Game is over. You LOSE!");
+        MessageToUser.getMessage("Boooooom! That's was mine) Sry, but you LOSE( " + "\n" + " Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
     public int getFlagsCount() {
@@ -189,8 +188,8 @@ public class GameModel implements ModelSubjectForObservers{
 
     public void setGameParameters(GameParameters gameParameters) {
         this.gameParameters = gameParameters;
-        this.minesField = new Cell[gameParameters.getCellsCountWidth()][gameParameters.getCellsCountHeight()];
-        this.setFieldSize(gameParameters.getCellsCountWidth(), gameParameters.getCellsCountHeight());
+        this.minesField = new Cell[gameParameters.getMinesFieldWidth()][gameParameters.getMinesFieldHeight()];
+        this.setFieldSize(gameParameters.getMinesFieldWidth(), gameParameters.getMinesFieldHeight());
         this.setCellsCount(gameParameters.getCellsCount());
         this.setFlagsCount(gameParameters.getFlagsCount());
         this.setMinesCount(gameParameters.getMinesCount());
@@ -209,6 +208,6 @@ public class GameModel implements ModelSubjectForObservers{
     @Override
     public void notifyObservers() {
         for(ModelObserver observer : this.observers)
-            observer.setChanges(this.cellsCount, this.flagsCount, this.minesCount, this.fieldWidth, this.fieldHeight);
+            observer.setGameModelChanges(this.cellsCount, this.flagsCount, this.minesCount, this.fieldWidth, this.fieldHeight);
     }
 }

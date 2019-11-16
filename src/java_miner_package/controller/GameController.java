@@ -2,7 +2,7 @@ package java_miner_package.controller;
 
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
-import java_miner_package.view.game_panel.game_paint_board_panel.DrawCell;
+import java_miner_package.view.game_panel.game_paint_board_panel.DrawingCell;
 import java_miner_package.view.MainWindow;
 
 import java.awt.*;
@@ -21,14 +21,12 @@ public class GameController {
 
     public void startGame() {
         this.setGameParameters(this.gameParameters);
-        this.gameModel.createMinesField();
+        this.gameModel.loadMinesField();
         this.loadGamePaintBoard();
     }
 
     private void loadGamePaintBoard() {
-        int width = this.gameParameters.getCellsCountWidth();
-        int height = this.gameParameters.getCellsCountHeight();
-        this.mainWindow.getGamePaintBoard().loadPaintBoard(width, height, this.gameModel.getMinesField());
+        this.mainWindow.getGamePaintBoard().loadPaintBoard(this.gameModel.getMinesField());
         this.repaintGamePaintBoard();
     }
 
@@ -37,10 +35,10 @@ public class GameController {
     }
 
     void openCell(Point p) {
-        for(DrawCell[] arr : this.mainWindow.getGamePaintBoard().getPaintBoard()) {
-            for(DrawCell drawCell : arr) {
-                if(drawCell.isPointInCellBounds(p)) {
-                    this.gameModel.setCellOpen(drawCell.getCell());
+        for(DrawingCell[] arr : this.mainWindow.getGamePaintBoard().getPaintBoardField()) {
+            for(DrawingCell drawingCell : arr) {
+                if(drawingCell.isPointInCellBounds(p)) {
+                    this.gameModel.openCell(drawingCell.getCell());
                 }
             }
         }
@@ -48,15 +46,15 @@ public class GameController {
     }
 
     void openAllCells() {
-        this.gameModel.setAllCellsOpen();
+        this.gameModel.openAllCells();
         this.repaintGamePaintBoard();
     }
 
     void setFlag(Point p) {
-        for(DrawCell[] arr : this.mainWindow.getGamePaintBoard().getPaintBoard()) {
-            for(DrawCell drawCell : arr) {
-                if(drawCell.isPointInCellBounds(p)) {
-                    this.gameModel.setFlagOnBlock(drawCell.getCell());
+        for(DrawingCell[] arr : this.mainWindow.getGamePaintBoard().getPaintBoardField()) {
+            for(DrawingCell drawingCell : arr) {
+                if(drawingCell.isPointInCellBounds(p)) {
+                    this.gameModel.setFlagOnCell(drawingCell.getCell());
                     break;
                 }
             }

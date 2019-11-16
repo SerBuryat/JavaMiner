@@ -20,6 +20,7 @@ public class MainWindow extends JFrame{
     public MainWindow(GameController gameController, GameModel gameModel) {
         this.gameController = gameController;
         this.gameModel = gameModel;
+        //noinspection SpellCheckingInspection
         this.setTitle("Java Miner (by SerBuryat)");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(800, 800);
