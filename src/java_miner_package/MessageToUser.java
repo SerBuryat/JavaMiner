@@ -1,4 +1,4 @@
-package java_miner_package.model;
+package java_miner_package;
 
 import javax.swing.*;
 

@@ -1,40 +1,44 @@
 package java_miner_package.view.game_panel.game_paint_board_panel;
 
-import java_miner_package.controller.MouseControl;
+import java_miner_package.controller.GameController;
+import java_miner_package.controller.input_control.InputTypeControl;
+import java_miner_package.controller.input_control.KeyBoardControl;
 import java_miner_package.model.Cell;
-import java_miner_package.model.ModelObserver;
 import java_miner_package.view.MainWindow;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePaintBoard extends JPanel implements ModelObserver {
+public class GamePaintBoard extends JPanel {
     private final int paintBoardWidth;
     private final int paintBoardHeight;
     private int fieldWidth;
     private int fieldHeight;
     private DrawingCell[][] paintBoardField;
+    private CurrentDrawingCell currentDrawingCell;
+    private InputTypeControl controlType;
 
-    public GamePaintBoard(MainWindow mainWindow) {
+    public GamePaintBoard(MainWindow mainWindow, InputTypeControl controlType) {
         this.paintBoardWidth = 700;
         this.paintBoardHeight = 700;
         this.setSize(this.paintBoardWidth, this.paintBoardHeight);
-        this.fieldWidth = mainWindow.getGameController().getGameParameters().getMinesFieldWidth();
-        this.fieldHeight = mainWindow.getGameController().getGameParameters().getMinesFieldHeight();
+        this.fieldWidth = mainWindow.getGameController().getGameParameters().getFieldWidth();
+        this.fieldHeight = mainWindow.getGameController().getGameParameters().getFieldHeight();
         this.paintBoardField = new DrawingCell[fieldWidth][fieldHeight];
-
-        this.addMouseListener(new MouseControl(mainWindow.getGameController())); // set mouse control on this board
-
-        mainWindow.getGameModel().registerObserver(this);
+        this.controlType = controlType;
+        this.loadPaintBoard(mainWindow.getGameModel().getMinesField());
+        this.loadPaintBoardControl();
     }
 
     public void paint(Graphics g) { // drawing pain board
         super.paint(g);
+        this.requestFocus();
         for(int x = 0; x < this.fieldWidth; x++) {
             for(int y = 0; y < this.fieldHeight; y++) {
                 this.paintBoardField[x][y].paintDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
             }
         }
+        this.currentDrawingCell.paintCurrentDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
     }
 
     public DrawingCell[][] getPaintBoardField() {
@@ -49,8 +53,7 @@ public class GamePaintBoard extends JPanel implements ModelObserver {
         return  this.paintBoardHeight / this.fieldHeight;
     }
 
-    public void loadPaintBoard(Cell[][] minesField) { // fill paint board with DrawCell
-        this.paintBoardField = new DrawingCell[this.fieldWidth][this.fieldHeight];
+    private void loadPaintBoard(Cell[][] minesField) {
         for(int x = 0; x < this.fieldWidth; x++) {
             for(int y = 0; y < this.fieldHeight; y++) {
                 this.paintBoardField[x][y] = new DrawingCell(minesField[x][y], getDrawingCellWidth(), getDrawingCellHeight());
@@ -58,9 +61,9 @@ public class GamePaintBoard extends JPanel implements ModelObserver {
         }
     }
 
-    @Override
-    public void setGameModelChanges(int cellsCount, int flagsCount, int minesCount, int fieldWidth, int fieldHeight) {
-        this.fieldWidth = fieldWidth;
-        this.fieldHeight = fieldHeight;
+    private void loadPaintBoardControl() {
+        this.currentDrawingCell = new CurrentDrawingCell(fieldWidth / 2, fieldHeight / 2, fieldWidth, fieldHeight, this.getDrawingCellWidth(), this.getDrawingCellHeight());
+        this.controlType.setCurrentCell(this.currentDrawingCell);
+        this.controlType.addControlToGamePaintBoard(this);
     }
 }

@@ -2,6 +2,8 @@ package java_miner_package.view.options_panel;
 
 import java_miner_package.model.GameParameters;
 import java_miner_package.view.MainWindow;
+import java_miner_package.view.game_panel.GamePanel;
+import java_miner_package.view.menu_panel.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,13 +36,13 @@ public class OptionsPanel extends JPanel {
             GameParameters newGameParameters = new GameParameters(width, height, minesCount);
 
             mainWindow.getGameController().setGameParameters(newGameParameters); // load new game parameters
-            mainWindow.loadGamePanel();// load game field
             mainWindow.getGameController().startGame();// initializing game
+            mainWindow.loadPanelToMainWindow(new GamePanel(mainWindow));// load game field
         });
 
         JButton cancelOptionsButton = new JButton("CANCEL");
         cancelOptionsButton.addActionListener(action -> { // back to menu
-            mainWindow.loadMenuPanel();
+            mainWindow.loadPanelToMainWindow(new MenuPanel(mainWindow));
         });
 
         this.addComponentsInGridTableByPairs(fieldWidthLabel, this.fieldWidthTextField); // left argument -> to left cell of grid table ... right -> to right

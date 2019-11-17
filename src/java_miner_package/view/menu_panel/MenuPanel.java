@@ -1,6 +1,8 @@
 package java_miner_package.view.menu_panel;
 
 import java_miner_package.view.MainWindow;
+import java_miner_package.view.game_panel.GamePanel;
+import java_miner_package.view.options_panel.OptionsPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,12 +14,12 @@ public class MenuPanel extends JPanel  {
 
        JButton menuStartButton = new JButton("Start game");
         menuStartButton.addActionListener(action -> {
-            mainWindow.loadGamePanel();
             mainWindow.getGameController().startGame();
+            mainWindow.loadPanelToMainWindow(new GamePanel(mainWindow));
         });
 
         JButton menuOptionsButton = new JButton("Options");
-        menuOptionsButton.addActionListener(action -> mainWindow.loadOptionsPanel());
+        menuOptionsButton.addActionListener(action -> mainWindow.loadPanelToMainWindow(new OptionsPanel(mainWindow)));
 
         JButton menuExitButton = new JButton("Exit");
         menuExitButton.addActionListener(action -> System.exit(1));

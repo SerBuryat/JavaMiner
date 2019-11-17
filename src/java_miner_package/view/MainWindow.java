@@ -5,7 +5,6 @@ import java_miner_package.model.GameModel;
 import java_miner_package.view.game_panel.GamePanel;
 import java_miner_package.view.game_panel.game_paint_board_panel.GamePaintBoard;
 import java_miner_package.view.menu_panel.MenuPanel;
-import java_miner_package.view.options_panel.OptionsPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +12,11 @@ import java.awt.*;
 public class MainWindow extends JFrame{
     private final GameController gameController;
     private final GameModel gameModel;
-    private final GamePanel gamePanel;
-    private final MenuPanel menuPanel;
-    private final OptionsPanel optionsPanel;
+    private GamePanel gamePanel;
 
     public MainWindow(GameController gameController, GameModel gameModel) {
         this.gameController = gameController;
         this.gameModel = gameModel;
-        //noinspection SpellCheckingInspection
         this.setTitle("Java Miner (by SerBuryat)");
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setSize(800, 800);
@@ -29,33 +25,17 @@ public class MainWindow extends JFrame{
         this.setFocusable(true);
         this.setLayout(new BorderLayout());
 
-        this.menuPanel = new MenuPanel(this);
-        this.gamePanel = new GamePanel(this);
-        this.optionsPanel = new OptionsPanel(this);
-
-        this.add(this.menuPanel, BorderLayout.CENTER);
+        MenuPanel menuPanel = new MenuPanel(this);
+        this.add(menuPanel, BorderLayout.CENTER);
 
         this.setVisible(true);
     }
 
-    public GamePaintBoard getGamePaintBoard() {
-        return this.gamePanel.getGamePaintBoard();
-    }
-
-    public void loadGamePanel() {// load game panel , hide current panel
-        this.setContentPane(this.gamePanel);
-        this.invalidate();
-        this.validate();
-    }
-
-    public void loadMenuPanel() {// load menu panel , hide current panel
-        this.setContentPane(this.menuPanel);
-        this.invalidate();
-        this.validate();
-    }
-
-    public void loadOptionsPanel() {// load game panel , hide current panel
-        this.setContentPane(this.optionsPanel);
+    public void loadPanelToMainWindow(JPanel panel) {
+        if(panel.getClass() == GamePanel.class) // very bad decision))) Btw it's for getGamePaintBoard method working on
+            this.gamePanel = (GamePanel) panel;
+        this.getContentPane().remove(0); // delete current panel
+        this.getContentPane().add(panel);
         this.invalidate();
         this.validate();
     }
@@ -67,4 +47,9 @@ public class MainWindow extends JFrame{
     public GameModel getGameModel() {
         return gameModel;
     }
+
+    public GamePaintBoard getGamePaintBoard() {
+        return this.gamePanel.getGamePaintBoard();
+    }
+
 }

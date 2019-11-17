@@ -34,7 +34,7 @@ public class DrawingCell {
                 new Mine().paintDrawCellDecorator(g, this);
             if(this.cell.getMineCounter()!= 0) // has counter? -> paint counter
                 new Counter(this.cell.getMineCounter()).paintDrawCellDecorator(g, this);
-        } else { // if closed
+        } else {
             g.setColor(this.closedColor);
             g.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
             if(this.cell.getHasFlag()) // has flag? -> paint flag
@@ -42,17 +42,6 @@ public class DrawingCell {
         }
         g.setColor(this.bordersColor);
         g.drawRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
-    }
-
-    public boolean isPointInCellBounds(Point p) {
-        int xMin = this.x * this.cellWidth; //  left top X of this block
-        int yMin = this.y * this.cellHeight;//  left top Y of this block
-        int xMax = xMin + this.cellWidth;//  right bottom X of this block
-        int yMax = yMin + this.cellHeight;//  right bottom Y of this block
-        int pointX = (int)p.getX();// x on click
-        int pointY = (int)p.getY();// y on click
-
-        return ((pointX >= xMin && pointY >= yMin) && (pointX <= xMax && pointY <= yMax));
     }
 
     public Cell getCell() {

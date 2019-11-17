@@ -1,5 +1,7 @@
 package java_miner_package.model;
 
+import java_miner_package.MessageToUser;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -19,7 +21,7 @@ public class GameModel implements ModelSubjectForObservers{
         this.setGameParameters(gameParameters);
     }
 
-    public void loadMinesField() {
+    public void createGame() {
         this.fillMinesFieldWithCells(); // fill mines field with blocks
         this.fillMinesFieldWithMines(); //  with mines
         this.fillMinesFieldWithCounters(); // with counters
@@ -65,7 +67,7 @@ public class GameModel implements ModelSubjectForObservers{
                     gameOverLose();
                 } else {
 
-                    if((this.cellsCount - this.minesCount) == 0) {
+                    if(this.cellsCount == this.minesCount) {
                         gameOverWin();
                         return;
                     }
@@ -149,6 +151,8 @@ public class GameModel implements ModelSubjectForObservers{
         MessageToUser.getMessage("Boooooom! That's was mine) Sry, but you LOSE( " + "\n" + " Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
+
+
     public int getFlagsCount() {
         return flagsCount;
     }
@@ -188,8 +192,8 @@ public class GameModel implements ModelSubjectForObservers{
 
     public void setGameParameters(GameParameters gameParameters) {
         this.gameParameters = gameParameters;
-        this.minesField = new Cell[gameParameters.getMinesFieldWidth()][gameParameters.getMinesFieldHeight()];
-        this.setFieldSize(gameParameters.getMinesFieldWidth(), gameParameters.getMinesFieldHeight());
+        this.minesField = new Cell[gameParameters.getFieldWidth()][gameParameters.getFieldHeight()];
+        this.setFieldSize(gameParameters.getFieldWidth(), gameParameters.getFieldHeight());
         this.setCellsCount(gameParameters.getCellsCount());
         this.setFlagsCount(gameParameters.getFlagsCount());
         this.setMinesCount(gameParameters.getMinesCount());
@@ -199,12 +203,10 @@ public class GameModel implements ModelSubjectForObservers{
     public void registerObserver(ModelObserver observer) {
         this.observers.add(observer);
     }
-
     @Override
     public void deleteObserver(ModelObserver observer) {
         this.observers.remove(observer);
     }
-
     @Override
     public void notifyObservers() {
         for(ModelObserver observer : this.observers)
