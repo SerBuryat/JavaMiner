@@ -1,7 +1,7 @@
 package java_miner_package.controller.input_control;
 
 import java_miner_package.controller.GameController;
-import java_miner_package.view.game_panel.game_paint_board_panel.GamePaintBoard;
+import java_miner_package.view.game_paint_board.GamePaintBoard;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -23,33 +23,31 @@ public class KeyBoardControl extends InputTypeControl implements KeyListener{
 
         switch (keycode) {
             case KeyEvent.VK_LEFT:
-                super.currentCell.moveLeft();
-                super.gameController.repaintGamePaintBoard();
+                super.gameController.moveCellPointerLeft(super.cellPointer);
                 break;
             case KeyEvent.VK_RIGHT:
-                super.currentCell.moveRight();
-                super.gameController.repaintGamePaintBoard();
+                super.gameController.moveCellPointerRight(super.cellPointer);
                 break;
             case KeyEvent.VK_UP:
-                super.currentCell.moveUp();
-                super.gameController.repaintGamePaintBoard();
+                super.gameController.moveCellPointerUp(super.cellPointer);
                 break;
             case KeyEvent.VK_DOWN:
-                super.currentCell.moveDown();
-                super.gameController.repaintGamePaintBoard();
+                super.gameController.moveCellPointerDown(super.cellPointer);
                 break;
             case KeyEvent.VK_SPACE:
-                super.gameController.openAllCells();
+                super.gameController.openCell(cellPointer);
                 break;
             case KeyEvent.VK_ENTER:
-                super.gameController.openCell(currentCell);
+                super.gameController.openAllCells();
                 break;
             case KeyEvent.VK_F:
-                super.gameController.setFlag(currentCell);
+                super.gameController.setFlag(cellPointer);
                 break;
         }
     }
 
+
+    ////////////////////////////////////////////
     @Override
     public void keyReleased(KeyEvent e) {
     }

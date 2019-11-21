@@ -4,9 +4,9 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-class JTextFieldLimit extends PlainDocument {
+class JTextFieldLogic extends PlainDocument {
     private final int limit;
-    JTextFieldLimit(int limit) {
+    JTextFieldLogic(int limit) {
         super();
         this.limit = limit;
     }
@@ -15,7 +15,7 @@ class JTextFieldLimit extends PlainDocument {
         if (str == null)
             return;
 
-        if ((getLength() + str.length()) <= limit) {
+        if ((getLength() + str.length()) <= limit) { // check limit of str.length
             super.insertString(offset, str, attr);
         }
     }

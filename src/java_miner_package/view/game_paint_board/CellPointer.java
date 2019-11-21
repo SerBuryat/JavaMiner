@@ -1,22 +1,22 @@
-package java_miner_package.view.game_panel.game_paint_board_panel;
+package java_miner_package.view.game_paint_board;
+
+import java_miner_package.model.GameParameters;
 
 import java.awt.*;
 
-public class CurrentDrawingCell {
+public class CellPointer {
+    private GameParameters gameParameters;
     private int x;
     private int y;
-    private int fieldWidth;
-    private int fieldHeight;
     private int cellWidth;
     private int cellHeight;
 
-    CurrentDrawingCell(int x, int y, int fieldWidth, int fieldHeight, int cellWidth, int cellHeight) {
+    CellPointer(int x, int y, int cellWidth, int cellHeight, GameParameters gameParameters) {
         this.x = x;
         this.y = y;
-        this.fieldWidth = fieldWidth;
-        this.fieldHeight = fieldHeight;
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
+        this.gameParameters = gameParameters;
     }
 
     void paintCurrentDrawingCell(Graphics g, int cellWidth, int cellHeight) {
@@ -48,12 +48,12 @@ public class CurrentDrawingCell {
     }
 
     private void setX(int x) {
-        if(x >= 0 && x < this.fieldWidth)
+        if(x >= 0 && x < this.gameParameters.getFieldWidth())
             this.x = x;
     }
 
     private void setY(int y) {
-        if(y >= 0 && y < this.fieldHeight)
+        if(y >= 0 && y < this.gameParameters.getFieldHeight())
             this.y = y;
     }
 
@@ -71,14 +71,6 @@ public class CurrentDrawingCell {
 
     public int getCellHeight() {
         return cellHeight;
-    }
-
-    public int getFieldWidth() {
-        return fieldWidth;
-    }
-
-    public int getFieldHeight() {
-        return fieldHeight;
     }
 
     @Override

@@ -3,8 +3,8 @@ package java_miner_package.view.game_panel;
 import java_miner_package.model.Cell;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.ModelObserver;
-import java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator.DecoratorImageResources;
-import java_miner_package.view.game_panel.game_paint_board_panel.DrawingCell;
+import java_miner_package.view.game_paint_board.cell_decorator.DecoratorImageResources;
+import java_miner_package.view.game_paint_board.DrawingCell;
 
 import javax.swing.*;
 import java.awt.*;

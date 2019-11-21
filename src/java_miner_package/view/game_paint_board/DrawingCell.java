@@ -1,9 +1,9 @@
-package java_miner_package.view.game_panel.game_paint_board_panel;
+package java_miner_package.view.game_paint_board;
 
 import java_miner_package.model.Cell;
-import java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator.Counter;
-import java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator.Flag;
-import java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator.Mine;
+import java_miner_package.view.game_paint_board.cell_decorator.Counter;
+import java_miner_package.view.game_paint_board.cell_decorator.Flag;
+import java_miner_package.view.game_paint_board.cell_decorator.Mine;
 
 import java.awt.*;
 

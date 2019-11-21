@@ -1,8 +1,6 @@
-package java_miner_package.view.game_panel.game_paint_board_panel;
+package java_miner_package.view.game_paint_board;
 
-import java_miner_package.controller.GameController;
 import java_miner_package.controller.input_control.InputTypeControl;
-import java_miner_package.controller.input_control.KeyBoardControl;
 import java_miner_package.model.Cell;
 import java_miner_package.view.MainWindow;
 
@@ -12,11 +10,11 @@ import java.awt.*;
 public class GamePaintBoard extends JPanel {
     private final int paintBoardWidth;
     private final int paintBoardHeight;
-    private int fieldWidth;
-    private int fieldHeight;
-    private DrawingCell[][] paintBoardField;
-    private CurrentDrawingCell currentDrawingCell;
-    private InputTypeControl controlType;
+    private final int fieldWidth;
+    private final int fieldHeight;
+    private final DrawingCell[][] paintBoardField;
+    private final CellPointer cellPointer;
+    private final InputTypeControl controlType;
 
     public GamePaintBoard(MainWindow mainWindow, InputTypeControl controlType) {
         this.paintBoardWidth = 700;
@@ -26,6 +24,7 @@ public class GamePaintBoard extends JPanel {
         this.fieldHeight = mainWindow.getGameController().getGameParameters().getFieldHeight();
         this.paintBoardField = new DrawingCell[fieldWidth][fieldHeight];
         this.controlType = controlType;
+        this.cellPointer = new CellPointer(fieldWidth / 2, fieldHeight / 2, this.getDrawingCellWidth(), this.getDrawingCellHeight(), mainWindow.getGameController().getGameParameters());
         this.loadPaintBoard(mainWindow.getGameModel().getMinesField());
         this.loadPaintBoardControl();
     }
@@ -38,7 +37,7 @@ public class GamePaintBoard extends JPanel {
                 this.paintBoardField[x][y].paintDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
             }
         }
-        this.currentDrawingCell.paintCurrentDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
+        this.cellPointer.paintCurrentDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
     }
 
     public DrawingCell[][] getPaintBoardField() {
@@ -62,8 +61,7 @@ public class GamePaintBoard extends JPanel {
     }
 
     private void loadPaintBoardControl() {
-        this.currentDrawingCell = new CurrentDrawingCell(fieldWidth / 2, fieldHeight / 2, fieldWidth, fieldHeight, this.getDrawingCellWidth(), this.getDrawingCellHeight());
-        this.controlType.setCurrentCell(this.currentDrawingCell);
+        this.controlType.setCellPointer(this.cellPointer);
         this.controlType.addControlToGamePaintBoard(this);
     }
 }

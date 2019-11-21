@@ -1,6 +1,6 @@
-package java_miner_package.view.game_panel.game_paint_board_panel.cell_decorator;
+package java_miner_package.view.game_paint_board.cell_decorator;
 
-import java_miner_package.view.game_panel.game_paint_board_panel.DrawingCell;
+import java_miner_package.view.game_paint_board.DrawingCell;
 
 import java.awt.*;
 

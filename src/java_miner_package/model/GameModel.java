@@ -141,12 +141,14 @@ public class GameModel implements ModelSubjectForObservers{
     }
 
     private void gameOverWin() {
+        this.openAllCells();
         this.isGameStopped = true;
         MessageToUser.getMessage("Congratulations! You WIN! All " + (this.gameParameters.getCellsCount() - this.minesCount) +  " cells is open!"
                 + "\n" +  "Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
     private void gameOverLose() {
+        this.openAllCells();
         this.isGameStopped = true;
         MessageToUser.getMessage("Boooooom! That's was mine) Sry, but you LOSE( " + "\n" + " Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }

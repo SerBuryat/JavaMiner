@@ -2,7 +2,7 @@ package java_miner_package.view.game_panel;
 
 
 import java_miner_package.view.MainWindow;
-import java_miner_package.view.game_panel.game_paint_board_panel.GamePaintBoard;
+import java_miner_package.view.game_paint_board.GamePaintBoard;
 import java_miner_package.view.menu_panel.MenuPanel;
 
 import javax.swing.*;
@@ -11,14 +11,11 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    private GamePaintBoard gamePaintBoard;
-
     public GamePanel(MainWindow mainWindow) { // game panel creating
         this.setBorder(new EmptyBorder(10,10,10,10));
         this.setLayout(new BorderLayout());
 
-        this.gamePaintBoard = new GamePaintBoard(mainWindow, mainWindow.getGameController().getGameParameters().getInputControlType());
-        this.add(this.gamePaintBoard, BorderLayout.CENTER);
+        this.add(mainWindow.getGameController().getGamePaintBoard(), BorderLayout.CENTER);
 
         GameStatusBoard gameStatusBoard = new GameStatusBoard(mainWindow.getGameModel());
         this.add(gameStatusBoard, BorderLayout.EAST);
@@ -34,9 +31,5 @@ public class GamePanel extends JPanel {
         backToMenuButton.addActionListener(action -> mainWindow.loadPanelToMainWindow(new MenuPanel(mainWindow)));
         panelButtons.add(backToMenuButton, BorderLayout.NORTH);
         panelButtons.add(restartGameButton,BorderLayout.SOUTH);
-    }
-
-    public GamePaintBoard getGamePaintBoard() {
-        return gamePaintBoard;
     }
 }

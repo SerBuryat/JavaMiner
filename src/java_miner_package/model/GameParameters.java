@@ -6,25 +6,28 @@ public class GameParameters {
 
     private final int fieldWidth;
     private final int fieldHeight;
-    private final int flagsCount;
-    private final int minesCount;
     private final int blocksCount;
+    private int flagsCount;
+    private int minesCount;
+    private LevelDifficulty levelDifficulty;
     private InputTypeControl inputControlType;
 
-    public GameParameters() { // default parameters constructor (15x15 table, 25 mines, 25 flags)
+    public GameParameters() { // default parameters constructor (15x15 table, EASY level difficulty)
+        this.levelDifficulty = LevelDifficulty.EASY;
         this.fieldWidth = 15;
         this.fieldHeight = 15;
-        this.minesCount = 25;
-        this.flagsCount = minesCount;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
+        this.minesCount = (int) (this.blocksCount * this.levelDifficulty.getValue());
+        this.flagsCount = minesCount;
     }
 
-    public GameParameters(int fieldWidth, int fieldHeight, int minesCount) {
+    public GameParameters(int fieldWidth, int fieldHeight, LevelDifficulty levelDifficulty) {
+        this.levelDifficulty = levelDifficulty;
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
-        this.minesCount = minesCount;
-        this.flagsCount = this.minesCount;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
+        this.minesCount = (int) (this.blocksCount * levelDifficulty.getValue());
+        this.flagsCount = this.minesCount;
     }
 
     public int getFieldHeight() {
@@ -53,5 +56,14 @@ public class GameParameters {
 
     public InputTypeControl getInputControlType() {
         return inputControlType;
+    }
+
+    public void setLevelDifficulty(LevelDifficulty levelDifficulty) {
+        this.levelDifficulty = levelDifficulty;
+        this.minesCount = (int) (this.blocksCount * this.levelDifficulty.getValue());
+        this.flagsCount = minesCount;
+    }
+    public LevelDifficulty getLevelDifficulty() {
+        return levelDifficulty;
     }
 }

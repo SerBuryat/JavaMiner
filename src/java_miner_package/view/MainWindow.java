@@ -3,7 +3,7 @@ package java_miner_package.view;
 import java_miner_package.controller.GameController;
 import java_miner_package.model.GameModel;
 import java_miner_package.view.game_panel.GamePanel;
-import java_miner_package.view.game_panel.game_paint_board_panel.GamePaintBoard;
+import java_miner_package.view.game_paint_board.GamePaintBoard;
 import java_miner_package.view.menu_panel.MenuPanel;
 
 import javax.swing.*;
@@ -12,7 +12,6 @@ import java.awt.*;
 public class MainWindow extends JFrame{
     private final GameController gameController;
     private final GameModel gameModel;
-    private GamePanel gamePanel;
 
     public MainWindow(GameController gameController, GameModel gameModel) {
         this.gameController = gameController;
@@ -32,8 +31,6 @@ public class MainWindow extends JFrame{
     }
 
     public void loadPanelToMainWindow(JPanel panel) {
-        if(panel.getClass() == GamePanel.class) // very bad decision))) Btw it's for getGamePaintBoard method working on
-            this.gamePanel = (GamePanel) panel;
         this.getContentPane().remove(0); // delete current panel
         this.getContentPane().add(panel);
         this.invalidate();
@@ -47,9 +44,4 @@ public class MainWindow extends JFrame{
     public GameModel getGameModel() {
         return gameModel;
     }
-
-    public GamePaintBoard getGamePaintBoard() {
-        return this.gamePanel.getGamePaintBoard();
-    }
-
 }
