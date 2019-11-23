@@ -142,15 +142,20 @@ public class GameModel implements ModelSubjectForObservers{
 
     private void gameOverWin() {
         this.openAllCells();
-        this.isGameStopped = true;
+        this.gameStop();
         MessageToUser.getMessage("Congratulations! You WIN! All " + (this.gameParameters.getCellsCount() - this.minesCount) +  " cells is open!"
                 + "\n" +  "Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
     private void gameOverLose() {
         this.openAllCells();
-        this.isGameStopped = true;
+        this.gameStop();
         MessageToUser.getMessage("Boooooom! That's was mine) Sry, but you LOSE( " + "\n" + " Click 'Restart game' for restart or 'Back to Menu' for change options!");
+    }
+
+    private void gameStop() {
+        isGameStopped = true;
+        this.notifyObservers();
     }
 
 
@@ -212,6 +217,6 @@ public class GameModel implements ModelSubjectForObservers{
     @Override
     public void notifyObservers() {
         for(ModelObserver observer : this.observers)
-            observer.setGameModelChanges(this.cellsCount, this.flagsCount, this.minesCount, this.fieldWidth, this.fieldHeight);
+            observer.setGameModelChanges(this.cellsCount, this.flagsCount, this.minesCount, this.fieldWidth, this.fieldHeight, this.isGameStopped);
     }
 }

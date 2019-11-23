@@ -23,8 +23,8 @@ public class MouseControl extends InputTypeControl implements MouseListener, Mou
     @Override
     public void mouseMoved(MouseEvent e) {
         Point point = e.getPoint();
-        int pointX = (int)point.getX() + 15;// +15 -> accuracy correction
-        int pointY = (int)point.getY() + 15;
+        int pointX = (int)point.getX() + 20;// +20 -> accuracy correction
+        int pointY = (int)point.getY() + 20;
         int x = (pointX - super.gameController.getGameParameters().getFieldWidth()) / super.cellPointer.getCellWidth();
         int y = (pointY - super.gameController.getGameParameters().getFieldHeight()) / super.cellPointer.getCellHeight();
         super.gameController.moveCellPointerTo(super.cellPointer, x, y);

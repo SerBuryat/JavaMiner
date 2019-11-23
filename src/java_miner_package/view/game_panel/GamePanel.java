@@ -11,25 +11,31 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    public GamePanel(MainWindow mainWindow) { // game panel creating
-        this.setBorder(new EmptyBorder(10,10,10,10));
-        this.setLayout(new BorderLayout());
-
-        this.add(mainWindow.getGameController().getGamePaintBoard(), BorderLayout.CENTER);
-
+    public GamePanel(MainWindow mainWindow) {
+        // Panel components initializing
         GameStatusBoard gameStatusBoard = new GameStatusBoard(mainWindow.getGameModel());
-        this.add(gameStatusBoard, BorderLayout.EAST);
+        GamePaintBoard gamePaintBoard = mainWindow.getGameController().getGamePaintBoard();
 
-        JPanel panelButtons = new JPanel(); // panel for buttons on 'SOUTH' game field panel
-        this.add(panelButtons, BorderLayout.SOUTH);
         JButton restartGameButton = new JButton("Restart game");
+        JButton backToMenuButton = new JButton("Back to menu");
         restartGameButton.addActionListener(action -> {
             mainWindow.getGameController().startGame();
             mainWindow.loadPanelToMainWindow(new GamePanel(mainWindow));
         });
-        JButton backToMenuButton = new JButton("Back to menu");
         backToMenuButton.addActionListener(action -> mainWindow.loadPanelToMainWindow(new MenuPanel(mainWindow)));
+
+        // Panel layout configs
+        this.setBorder(new EmptyBorder(10,10,10,10));
+        this.setLayout(new BorderLayout());
+
+        JPanel panelButtons = new JPanel(); // panel for buttons
         panelButtons.add(backToMenuButton, BorderLayout.NORTH);
         panelButtons.add(restartGameButton,BorderLayout.SOUTH);
+
+        this.add(panelButtons, BorderLayout.SOUTH);
+        this.add(gamePaintBoard, BorderLayout.CENTER);
+        this.add(gameStatusBoard, BorderLayout.EAST);
     }
+
+
 }

@@ -8,39 +8,36 @@ import java_miner_package.view.options_panel.OptionsPanel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MenuPanel extends JPanel  {
 
     public MenuPanel(MainWindow mainWindow) { // initializing game start menu
 
+        //Panel components initializing
        JLabel menuTitle = new JLabel("Java Miner");
 
         JCheckBox checkBoxEasy = new JCheckBox("EASY");
         checkBoxEasy.setSelected(true);
         JCheckBox checkBoxMiddle = new JCheckBox("MIDDLE");
         JCheckBox checkBoxHard = new JCheckBox("HARD");
-        checkBoxEasy.addActionListener(action -> {
-      if(checkBoxEasy.isSelected()) {
-         mainWindow.getGameController().getGameParameters().setLevelDifficulty(LevelDifficulty.EASY);
-         checkBoxMiddle.setSelected(false);
-         checkBoxHard.setSelected(false);
-      }
-     });
-        checkBoxMiddle.addActionListener(action -> {
-      if(checkBoxMiddle.isSelected()) {
-         mainWindow.getGameController().getGameParameters().setLevelDifficulty(LevelDifficulty.MIDDLE);
-         checkBoxEasy.setSelected(false);
-         checkBoxHard.setSelected(false);
-      }
-     });
-        checkBoxHard.addActionListener(action -> {
-      if(checkBoxHard.isSelected()) {
-         mainWindow.getGameController().getGameParameters().setLevelDifficulty(LevelDifficulty.HARD);
-         checkBoxEasy.setSelected(false);
-         checkBoxMiddle.setSelected(false);
-      }
-     });
 
+        ArrayList<JCheckBox> checkBoxList = new ArrayList<>();
+        checkBoxList.add(checkBoxEasy);
+        checkBoxList.add(checkBoxMiddle);
+        checkBoxList.add(checkBoxHard);
+        for(JCheckBox checkBox : checkBoxList) {
+            checkBox.addActionListener(action -> { // set level difficulty and 'turn off'  other checkBoxes
+                if(checkBox.isSelected()) {
+                    mainWindow.getGameController().getGameParameters().setLevelDifficulty(LevelDifficulty.valueOf(checkBox.getText()));
+                    checkBoxList.remove(checkBox);
+                    for(JCheckBox checkB : checkBoxList) {
+                        checkB.setSelected(false);
+                    }
+                    checkBoxList.add(checkBox);
+                }
+            });
+        }
 
         JButton menuStartButton = new JButton("Start game");
         JButton menuOptionsButton = new JButton("Options");
@@ -52,6 +49,7 @@ public class MenuPanel extends JPanel  {
         menuOptionsButton.addActionListener(action -> mainWindow.loadPanelToMainWindow(new OptionsPanel(mainWindow)));
         menuExitButton.addActionListener(action -> System.exit(1));
 
+        // panel layout configs
         this.setBorder(new EmptyBorder(10,10,10,10));
         this.setLayout(new GridBagLayout());
 
