@@ -5,7 +5,7 @@ import java_miner_package.view.game_paint_board.CellPointer;
 import java_miner_package.view.game_paint_board.GamePaintBoard;
 
 public abstract class InputTypeControl {
-    GameController gameController;
+    final GameController gameController;
     CellPointer cellPointer;
 
     InputTypeControl(GameController gameController) {

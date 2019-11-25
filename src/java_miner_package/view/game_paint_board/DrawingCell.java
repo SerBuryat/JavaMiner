@@ -8,7 +8,7 @@ import java_miner_package.view.game_paint_board.cell_decorator.Mine;
 import java.awt.*;
 
 public class DrawingCell {
-    private Cell cell;
+    private final Cell cell;
     private final int x;
     private final int y;
     private final int cellWidth;
@@ -77,9 +77,11 @@ public class DrawingCell {
         return closedColor;
     }
 
-   public Color getOpenColor() {
-        return openColor;
-   }
+// --Commented out by Inspection START (25.11.2019 20:30):
+//   public Color getOpenColor() {
+//        return openColor;
+//   }
+// --Commented out by Inspection STOP (25.11.2019 20:30)
 
     public int getCellArc() {
         return cellArc;

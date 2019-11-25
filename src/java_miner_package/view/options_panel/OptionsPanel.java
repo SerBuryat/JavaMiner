@@ -1,5 +1,6 @@
 package java_miner_package.view.options_panel;
 
+import java_miner_package.MessageToUser;
 import java_miner_package.controller.input_control.KeyBoardControl;
 import java_miner_package.controller.input_control.MouseControl;
 import java_miner_package.model.GameParameters;
@@ -24,13 +25,10 @@ public class OptionsPanel extends JPanel {
     private final JCheckBox mouseControlCheckBox;
     private final JCheckBox keyBoardControlCheckBox;
     private final ArrayList<JCheckBox> levelDiffCheckBoxList;
-    private final JCheckBox checkBoxEasy;
-    private final JCheckBox checkBoxMiddle;
-    private final JCheckBox checkBoxHard;
     private final Font font = new Font("Serif", Font.PLAIN, 40);
 
     public OptionsPanel(MainWindow mainWindow) {
-        // panel components initializing
+        // panel and components initializing
         this.mainWindow = mainWindow;
 
         JLabel labelWidthLabel = new JLabel("WIDTH:"); // labels
@@ -39,41 +37,49 @@ public class OptionsPanel extends JPanel {
 
         this.fieldWidthTextField = this.createTextFieldWithCharLimit(2); // limited text fields. 2 -> only 2 chars in text field
         this.fieldHeightTextField = this.createTextFieldWithCharLimit(2);
+        this.fieldWidthTextField.setText(String.valueOf(mainWindow.getGameController().getGameParameters().getFieldWidth()));
+        this.fieldHeightTextField.setText(String.valueOf(mainWindow.getGameController().getGameParameters().getFieldHeight()));
 
         this.mouseControlCheckBox = new JCheckBox("Mouse Control");// checkBoxes
         this.mouseControlCheckBox.setSelected(true);
+        this.mouseControlCheckBox.setEnabled(false);
         this.keyBoardControlCheckBox = new JCheckBox("KeyBoardControl");
 
         this.inputControlCheckBoxesList = new ArrayList<>();
         this.inputControlCheckBoxesList.add(this.mouseControlCheckBox);
         this.inputControlCheckBoxesList.add(this.keyBoardControlCheckBox);
         for(JCheckBox checkBox : inputControlCheckBoxesList) {
-            checkBox.addActionListener(action -> { // set level difficulty by checkBox text and 'turn off'
+            checkBox.addActionListener(action -> { // set level difficulty by checkBox text and 'turn off' others
                 if(checkBox.isSelected()) {
+                    checkBox.setEnabled(false);
                     inputControlCheckBoxesList.remove(checkBox);
                     for(JCheckBox checkB : inputControlCheckBoxesList) {
                         checkB.setSelected(false);
+                        checkB.setEnabled(true);
                     }
                     inputControlCheckBoxesList.add(checkBox);
                 }
             });
         }
 
-        this.checkBoxEasy = new JCheckBox("EASY");
-        this.checkBoxEasy.setSelected(true);
-        this.checkBoxMiddle = new JCheckBox("MIDDLE");
-        this.checkBoxHard = new JCheckBox("HARD");
+        JCheckBox checkBoxEasy = new JCheckBox("EASY");
+        checkBoxEasy.setSelected(true);
+        checkBoxEasy.setEnabled(false);
+        JCheckBox checkBoxMiddle = new JCheckBox("MIDDLE");
+        JCheckBox checkBoxHard = new JCheckBox("HARD");
         this.levelDiffCheckBoxList = new ArrayList<>();
-        this.levelDiffCheckBoxList.add(this.checkBoxEasy);
-        this.levelDiffCheckBoxList.add(this.checkBoxMiddle);
-        this.levelDiffCheckBoxList.add(this.checkBoxHard);
+        this.levelDiffCheckBoxList.add(checkBoxEasy);
+        this.levelDiffCheckBoxList.add(checkBoxMiddle);
+        this.levelDiffCheckBoxList.add(checkBoxHard);
         for(JCheckBox checkBox : levelDiffCheckBoxList) {
             checkBox.addActionListener(action -> { // set level difficulty by checkBox text and 'turn off'
                 if(checkBox.isSelected()) {
                     mainWindow.getGameController().getGameParameters().setLevelDifficulty(LevelDifficulty.valueOf(checkBox.getText()));
+                    checkBox.setEnabled(false);
                     levelDiffCheckBoxList.remove(checkBox);
                     for(JCheckBox checkB : levelDiffCheckBoxList) {
                         checkB.setSelected(false);
+                        checkB.setEnabled(true);
                     }
                     levelDiffCheckBoxList.add(checkBox);
                 }
@@ -81,9 +87,14 @@ public class OptionsPanel extends JPanel {
         }
 
         JPanel checkBoxes = new JPanel(new GridLayout());
-        checkBoxes.add(this.checkBoxEasy);
-        checkBoxes.add(this.checkBoxMiddle);
-        checkBoxes.add(this.checkBoxHard);
+        checkBoxes.add(checkBoxEasy);
+        checkBoxes.add(checkBoxMiddle);
+        checkBoxes.add(checkBoxHard);
+
+        JPanel infoPanel = new JPanel(new GridLayout());
+        infoPanel.add(new JLabel(LevelDifficulty.EASY.getDescription()));
+        infoPanel.add(new JLabel(LevelDifficulty.MIDDLE.getDescription()));
+        infoPanel.add(new JLabel(LevelDifficulty.HARD.getDescription()));
 
         JButton applyOptionsButton = new JButton("APPLY");
         JButton cancelOptionsButton = new JButton("CANCEL");
@@ -94,8 +105,10 @@ public class OptionsPanel extends JPanel {
 
         // panel layout configs
         this.addComponentsInGridTableByPairs(labelWidthLabel, this.fieldWidthTextField); // left argument -> to left cell of grid table ... right -> to right
+        //noinspection SuspiciousNameCombination
         this.addComponentsInGridTableByPairs(labelHeightLabel, this.fieldHeightTextField);
         this.addComponentsInGridTableByPairs(labelLevelDifficulty, checkBoxes);
+        this.addComponentsInGridTableByPairs(new JLabel("INFO: "), infoPanel);
         this.addComponentsInGridTableByPairs(this.mouseControlCheckBox, this.keyBoardControlCheckBox);
         this.addComponentsInGridTableByPairs(applyOptionsButton, cancelOptionsButton);
 
@@ -105,8 +118,14 @@ public class OptionsPanel extends JPanel {
     }
 
     private void applyButtonAction() {
-        int width = Integer.parseInt(this.fieldWidthTextField.getText()); // board with
-        int height = Integer.parseInt(this.fieldHeightTextField.getText()); // board height
+        //if width and height == "" -> load default gameParameters values
+        int width = (this.fieldWidthTextField.getText().equals("")) ? this.mainWindow.getGameController().getGameParameters().getFieldWidth() : Integer.parseInt(this.fieldWidthTextField.getText()); // board with
+        int height = (this.fieldHeightTextField.getText().equals("")) ? this.mainWindow.getGameController().getGameParameters().getFieldHeight() : Integer.parseInt(this.fieldHeightTextField.getText()); // board height
+
+        if(!(this.checkFieldSizeNumbers(width, height))) { // return if wrong diapason of numbers
+            return;
+        }
+
         LevelDifficulty levelDifficulty = LevelDifficulty.EASY;
         for(JCheckBox levelDiffCheckBox : this.levelDiffCheckBoxList) { // set level difficulty
             if(levelDiffCheckBox.isSelected()) {
@@ -140,5 +159,22 @@ public class OptionsPanel extends JPanel {
         this.componentPairs.put(left, right);
         this.add(left);
         this.add(right);
+    }
+
+    private boolean checkFieldSizeNumbers(int width, int height) {
+        if(width < 10 || height < 10) {
+            MessageToUser.getMessage("Numbers from 10 to 30 available");
+            return false;
+        }
+        if(width > 30 || height > 30) {
+            MessageToUser.getMessage("Numbers from 10 to 30 available");
+            return false;
+        }
+        if(Math.abs(width-height) > 5) {
+            MessageToUser.getMessage("Width and Height range must be <= 5");
+            return false;
+        }
+
+        return true;
     }
 }

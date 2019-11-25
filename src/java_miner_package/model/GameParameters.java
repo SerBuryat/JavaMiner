@@ -12,10 +12,10 @@ public class GameParameters {
     private LevelDifficulty levelDifficulty;
     private InputTypeControl inputControlType;
 
-    public GameParameters() { // default parameters constructor (15x15 table, EASY level difficulty)
+    public GameParameters() { // default parameters constructor (10x10 table, EASY level difficulty)
         this.levelDifficulty = LevelDifficulty.EASY;
-        this.fieldWidth = 15;
-        this.fieldHeight = 15;
+        this.fieldWidth = 10;
+        this.fieldHeight = 10;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
         this.minesCount = (int) (this.blocksCount * this.levelDifficulty.getValue());
         this.flagsCount = minesCount;
@@ -27,6 +27,14 @@ public class GameParameters {
         this.fieldHeight = fieldHeight;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
         this.minesCount = (int) (this.blocksCount * levelDifficulty.getValue());
+        this.flagsCount = this.minesCount;
+    }
+
+    public GameParameters(int fieldWidth, int fieldHeight, int minesCount) {
+        this.fieldWidth = fieldWidth;
+        this.fieldHeight = fieldHeight;
+        this.blocksCount = this.fieldWidth * this.fieldHeight;
+        this.minesCount = minesCount;
         this.flagsCount = this.minesCount;
     }
 
@@ -63,7 +71,9 @@ public class GameParameters {
         this.minesCount = (int) (this.blocksCount * this.levelDifficulty.getValue());
         this.flagsCount = minesCount;
     }
-    public LevelDifficulty getLevelDifficulty() {
-        return levelDifficulty;
-    }
+// --Commented out by Inspection START (25.11.2019 20:30):
+//    public LevelDifficulty getLevelDifficulty() {
+//        return levelDifficulty;
+//    }
+// --Commented out by Inspection STOP (25.11.2019 20:30)
 }

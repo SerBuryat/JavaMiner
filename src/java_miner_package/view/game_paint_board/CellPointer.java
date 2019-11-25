@@ -5,11 +5,11 @@ import java_miner_package.model.GameParameters;
 import java.awt.*;
 
 public class CellPointer {
-    private GameParameters gameParameters;
+    private final GameParameters gameParameters;
     private int x;
     private int y;
-    private int cellWidth;
-    private int cellHeight;
+    private final int cellWidth;
+    private final int cellHeight;
 
     CellPointer(int x, int y, int cellWidth, int cellHeight, GameParameters gameParameters) {
         this.x = x;

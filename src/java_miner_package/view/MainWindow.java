@@ -2,8 +2,6 @@ package java_miner_package.view;
 
 import java_miner_package.controller.GameController;
 import java_miner_package.model.GameModel;
-import java_miner_package.view.game_panel.GamePanel;
-import java_miner_package.view.game_paint_board.GamePaintBoard;
 import java_miner_package.view.menu_panel.MenuPanel;
 
 import javax.swing.*;
@@ -14,6 +12,7 @@ public class MainWindow extends JFrame{
     private final GameModel gameModel;
 
     public MainWindow(GameController gameController, GameModel gameModel) {
+        // panel and components initializing
         this.gameController = gameController;
         this.gameModel = gameModel;
         this.setTitle("Java Miner (by SerBuryat)");
@@ -24,6 +23,7 @@ public class MainWindow extends JFrame{
         this.setFocusable(true);
         this.setLayout(new BorderLayout());
 
+        // panel layout config
         MenuPanel menuPanel = new MenuPanel(this);
         this.add(menuPanel, BorderLayout.CENTER);
 

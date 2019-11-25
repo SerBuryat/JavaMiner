@@ -217,6 +217,6 @@ public class GameModel implements ModelSubjectForObservers{
     @Override
     public void notifyObservers() {
         for(ModelObserver observer : this.observers)
-            observer.setGameModelChanges(this.cellsCount, this.flagsCount, this.minesCount, this.fieldWidth, this.fieldHeight, this.isGameStopped);
+            observer.setGameModelChanges(this.cellsCount, this.flagsCount, this.minesCount, this.isGameStopped);
     }
 }

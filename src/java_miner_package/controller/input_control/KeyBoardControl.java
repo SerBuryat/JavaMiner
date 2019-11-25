@@ -34,9 +34,9 @@ public class KeyBoardControl extends InputTypeControl implements KeyListener{
             case KeyEvent.VK_DOWN:
                 super.gameController.moveCellPointerDown(super.cellPointer);
                 break;
-            case KeyEvent.VK_SPACE:
+            /*case KeyEvent.VK_SPACE:
                 super.gameController.openCell(cellPointer);
-                break;
+                break;*/
             case KeyEvent.VK_ENTER:
                 super.gameController.openAllCells();
                 break;
@@ -46,8 +46,8 @@ public class KeyBoardControl extends InputTypeControl implements KeyListener{
         }
     }
 
-
     ////////////////////////////////////////////
+
     @Override
     public void keyReleased(KeyEvent e) {
     }

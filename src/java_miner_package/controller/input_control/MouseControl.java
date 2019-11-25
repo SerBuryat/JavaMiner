@@ -35,15 +35,13 @@ public class MouseControl extends InputTypeControl implements MouseListener, Mou
         if(e.getButton() == MouseEvent.BUTTON1) {
             super.gameController.openCell(this.cellPointer);
         }
-        if(e.getButton() == MouseEvent.BUTTON2) {
+        /*if(e.getButton() == MouseEvent.BUTTON2) {
             super.gameController.openAllCells();
-        }
+        }*/
         if(e.getButton() == MouseEvent.BUTTON3) {
             super.gameController.setFlag(this.cellPointer);
         }
     }
-
-
 
     /////////////////////
     @Override

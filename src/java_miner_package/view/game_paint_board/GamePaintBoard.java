@@ -17,6 +17,7 @@ public class GamePaintBoard extends JPanel {
     private final InputTypeControl controlType;
 
     public GamePaintBoard(MainWindow mainWindow, InputTypeControl controlType) {
+        // panel and components initializing
         this.paintBoardWidth = 700;
         this.paintBoardHeight = 700;
         this.setSize(this.paintBoardWidth, this.paintBoardHeight);

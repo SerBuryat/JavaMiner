@@ -1,14 +1,14 @@
-package java_miner_package.view.game_panel;
+package java_miner_package.controller;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
-class GameTimer {
+public class GameTimer {
     private int minutes;
     private int seconds;
     private final Timer timer;
 
-    GameTimer(ActionListener actionListener) {
+    public GameTimer(ActionListener actionListener) {
         this.timer = new Timer(1000, actionListener);
         this.timer.start();
     }
@@ -17,7 +17,7 @@ class GameTimer {
         this.timer.stop();
     }
 
-    void timerPlusSecond() {
+    public void timerPlusSecond() {
         this.setSeconds(this.getSeconds()+1);
     }
 
@@ -41,7 +41,7 @@ class GameTimer {
         return seconds;
     }
 
-    String getTime() {
+    public String getTime() {
         String formatSeconds = String.format("%02d", this.seconds); // if 0 .. 9 seconds -> 00 .. 09 seconds returns
         return this.getMinutes() + ":" + formatSeconds;
     }

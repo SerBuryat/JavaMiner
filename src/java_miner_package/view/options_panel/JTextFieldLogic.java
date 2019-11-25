@@ -12,11 +12,14 @@ class JTextFieldLogic extends PlainDocument {
     }
 
     public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
-        if (str == null)
+        if (str == null) {
             return;
+        }
 
         if ((getLength() + str.length()) <= limit) { // check limit of str.length
-            super.insertString(offset, str, attr);
+            if(str.matches("[1-9]")) {//only digits
+                    super.insertString(offset, str, attr);
+            }
         }
     }
 }

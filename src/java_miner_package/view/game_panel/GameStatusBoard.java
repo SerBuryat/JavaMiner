@@ -1,5 +1,6 @@
 package java_miner_package.view.game_panel;
 
+import java_miner_package.controller.GameTimer;
 import java_miner_package.model.Cell;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.ModelObserver;
@@ -21,13 +22,14 @@ public class GameStatusBoard extends JPanel implements ActionListener,ModelObser
     private final int iconSize = 30;
 
     GameStatusBoard(GameModel gameModel) { // not a flexible panel, need to regroup a panel after making changes
+        // panel and components initializing
         Font font = new Font("Serif", Font.PLAIN, this.fontSize);
         this.gameTimer = new GameTimer(this);
         this.timerCount = this.labelCreator(gameTimer.getTime(), ImageResources.TIMER, font);
         this.flagsCount = this.labelCreator("x " + gameModel.getFlagsCount(), ImageResources.FLAG, font);
         this.minesCount = this.labelCreator("x " + gameModel.getMinesCount(), ImageResources.MINE, font);
         this.cellsCount = this.labelCreator("x " + gameModel.getCellsCount(), font);
-
+        //panel layout configs
         this.setLayout(new GridLayout(4,1)); // change if need more components in status bar
         this.add(this.timerCount);
         this.add(this.flagsCount);
@@ -37,7 +39,7 @@ public class GameStatusBoard extends JPanel implements ActionListener,ModelObser
     }
 
     @Override
-    public void setGameModelChanges(int cellsCount, int flagsCount, int minesCount, int fieldWidth, int fieldHeight, boolean isGameStopped) {
+    public void setGameModelChanges(int cellsCount, int flagsCount, int minesCount, boolean isGameStopped) {
         if(isGameStopped)
             this.gameTimer.timerStop();
         this.flagsCount.setText("x " + flagsCount);

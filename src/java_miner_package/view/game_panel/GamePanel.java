@@ -12,7 +12,7 @@ import java.awt.*;
 public class GamePanel extends JPanel {
 
     public GamePanel(MainWindow mainWindow) {
-        // Panel components initializing
+        // panel and components initializing
         GameStatusBoard gameStatusBoard = new GameStatusBoard(mainWindow.getGameModel());
         GamePaintBoard gamePaintBoard = mainWindow.getGameController().getGamePaintBoard();
 
