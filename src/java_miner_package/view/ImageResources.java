@@ -15,14 +15,9 @@ public class ImageResources {
     static {
         try {
             COUNTER_IMAGES_OF_NUMBERS = new HashMap<>();
-            COUNTER_IMAGES_OF_NUMBERS.put(1, ImageIO.read(new File("src/assets/number1.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(2, ImageIO.read(new File("src/assets/number2.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(3, ImageIO.read(new File("src/assets/number3.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(4, ImageIO.read(new File("src/assets/number4.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(5, ImageIO.read(new File("src/assets/number5.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(6, ImageIO.read(new File("src/assets/number6.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(7, ImageIO.read(new File("src/assets/number7.png")));
-            COUNTER_IMAGES_OF_NUMBERS.put(8, ImageIO.read(new File("src/assets/number8.png")));
+            for(int i = 1; i < 9; i++) { // load images to numbers from 1 to 8
+                COUNTER_IMAGES_OF_NUMBERS.put(i, ImageIO.read(new File("src/assets/number"+i+".png")));
+            }
             FLAG = ImageIO.read(new File("src/assets/flag.png"));
             MINE = ImageIO.read(new File("src/assets/mine.png"));
             TIMER = ImageIO.read(new File("src/assets/timer.png"));

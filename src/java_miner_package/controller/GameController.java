@@ -10,9 +10,9 @@ import java_miner_package.view.game_paint_board.GamePaintBoard;
 
 public class GameController {
     private final MainWindow mainWindow;
+    private final GameModel gameModel;
     private GamePaintBoard gamePaintBoard;
     private GameParameters gameParameters;
-    private final GameModel gameModel;
 
     public GameController(GameModel gameModel, GameParameters gameParameters) {
         this.gameModel = gameModel;

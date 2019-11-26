@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class GameModel implements ModelSubjectForObservers{
+    private final ArrayList<ModelObserver> observers = new ArrayList<>();
     private GameParameters gameParameters;
     private Cell[][] minesField;
     private int cellsCount;
@@ -15,46 +16,26 @@ public class GameModel implements ModelSubjectForObservers{
     private int fieldWidth;
     private int fieldHeight;
     private boolean isGameStopped = false;
-    private final ArrayList<ModelObserver> observers = new ArrayList<>();
+
 
     public GameModel(GameParameters gameParameters) {
         this.setGameParameters(gameParameters);
     }
 
+    public void setGameParameters(GameParameters gameParameters) {
+        this.gameParameters = gameParameters;
+        this.minesField = new Cell[gameParameters.getFieldWidth()][gameParameters.getFieldHeight()];
+        this.setFieldSize(gameParameters.getFieldWidth(), gameParameters.getFieldHeight());
+        this.setCellsCount(gameParameters.getCellsCount());
+        this.setFlagsCount(gameParameters.getFlagsCount());
+        this.setMinesCount(gameParameters.getMinesCount());
+    }
+
     public void createGame() {
-        this.fillMinesFieldWithCells(); // fill mines field with blocks
-        this.fillMinesFieldWithMines(); //  with mines
-        this.fillMinesFieldWithCounters(); // with counters
+        this.fillMinesFieldWithCells();
+        this.fillMinesFieldWithMines();
+        this.fillMinesFieldWithCounters();
         this.isGameStopped = false;
-    }
-
-    private void fillMinesFieldWithCells() {
-        for(int x = 0; x < this.fieldWidth; x++) {
-            for(int y = 0; y < this.fieldHeight; y++) {
-                this.minesField[x][y] = new Cell(x, y);
-            }
-        }
-    }
-
-    private void fillMinesFieldWithMines() { // fill randomly mines field with mines
-        for(int i = 0; i < this.minesCount; i++) {
-            int x_random = this.getRandomCoordinate(fieldWidth);
-            int y_random = this.getRandomCoordinate(fieldHeight);
-            while (this.minesField[x_random][y_random].getHasMine()) { // if block already has mine -> calculate another coordinate
-                x_random = this.getRandomCoordinate(fieldWidth);
-                y_random = this.getRandomCoordinate(fieldHeight);
-            }
-            this.minesField[x_random][y_random].setMine();
-        }
-    }
-
-    private void fillMinesFieldWithCounters() { // fill mines field with counters
-        for(Cell[] cells : this.minesField) {
-            for(Cell cell : cells) {
-                this.getCellNeighbors(cell);
-                this.countNearMines(cell);
-            }
-        }
     }
 
     public void openCell(Cell cell) {
@@ -72,7 +53,7 @@ public class GameModel implements ModelSubjectForObservers{
                         return;
                     }
 
-                    if(cell.getMineCounter() == 0) // if this cell is empty (without counter or mine)
+                    if(cell.getMineCount() == 0) // if this cell is empty (without counter or mine)
                         this.openEmptyNeighborsCells(cell);
                 }
             }
@@ -103,7 +84,36 @@ public class GameModel implements ModelSubjectForObservers{
         }
     }
 
-    private void openEmptyNeighborsCells(Cell cell) { // open all empty neighbors
+    private void fillMinesFieldWithCells() {
+        for(int x = 0; x < this.fieldWidth; x++) {
+            for(int y = 0; y < this.fieldHeight; y++) {
+                this.minesField[x][y] = new Cell(x, y);
+            }
+        }
+    }
+
+    private void fillMinesFieldWithMines() {
+        for(int i = 0; i < this.minesCount; i++) {
+            int xRandom = this.getRandomCoordinate(fieldWidth);
+            int yRandom = this.getRandomCoordinate(fieldHeight);
+            while (this.minesField[xRandom][yRandom].getHasMine()) {
+                xRandom = this.getRandomCoordinate(fieldWidth);
+                yRandom = this.getRandomCoordinate(fieldHeight);
+            }
+            this.minesField[xRandom][yRandom].setMine();
+        }
+    }
+
+    private void fillMinesFieldWithCounters() {
+        for(Cell[] cells : this.minesField) {
+            for(Cell cell : cells) {
+                this.getCellNeighbors(cell);
+                this.countNearMines(cell);
+            }
+        }
+    }
+
+    private void openEmptyNeighborsCells(Cell cell) { // open all empty neighbors(without counters)
             for(Cell b : this.getCellNeighbors(cell)) {
                 if(!(b.getIsOpen() && b.getHasMine()))
                     this.openCell(b);
@@ -115,9 +125,11 @@ public class GameModel implements ModelSubjectForObservers{
         int y = cell.getY();
         LinkedList<Cell> cellNeighbors = new LinkedList<>();
 
-        for (int i = x-1;i < x+2;i++) { // add every cell from minesField[x-1][y-1] (top left neighbor) to minesField[x+2][y+2] (bottom right neighbor)
+        // add every cell from minesField[x-1][y-1] (top left neighbor) to minesField[x+2][y+2] (bottom right neighbor)
+        for (int i = x-1;i < x+2;i++) {
             for (int j = y-1;j < y+2;j++) {
-                if (!(i < 0 || j < 0 || i > (this.fieldWidth - 1) || j > (this.fieldHeight - 1)))//cell is not running out of mines field
+                //check mines field borders
+                if (!(i < 0 || j < 0 || i > (this.fieldWidth - 1) || j > (this.fieldHeight - 1)))
                     if (!(i == y && j == x)) // if not current cell
                         cellNeighbors.add(minesField[i][j]);
             }
@@ -127,11 +139,11 @@ public class GameModel implements ModelSubjectForObservers{
 
     }
 
-    private void countNearMines(Cell cell) { // count every near mine for current block
+    private void countNearMines(Cell cell) {
         if(!cell.getHasMine()) {
             for(Cell neighbor : this.getCellNeighbors(cell)) {
                 if(neighbor.getHasMine())
-                    cell.setMineCounter(cell.getMineCounter() + 1);
+                    cell.setMineCount(cell.getMineCount() + 1);
             }
         }
     }
@@ -143,14 +155,16 @@ public class GameModel implements ModelSubjectForObservers{
     private void gameOverWin() {
         this.openAllCells();
         this.gameStop();
-        MessageToUser.getMessage("Congratulations! You WIN! All " + (this.gameParameters.getCellsCount() - this.minesCount) +  " cells is open!"
+        MessageToUser.getMessage("Congratulations! You WIN! All "
+                + (this.gameParameters.getCellsCount() - this.minesCount) +  " cells is open!"
                 + "\n" +  "Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
     private void gameOverLose() {
         this.openAllCells();
         this.gameStop();
-        MessageToUser.getMessage("Boooooom! That's was mine) Sry, but you LOSE( " + "\n" + " Click 'Restart game' for restart or 'Back to Menu' for change options!");
+        MessageToUser.getMessage("Boooooom! That's was mine) Sry, but you LOSE( " + "\n"
+                + " Click 'Restart game' for restart or 'Back to Menu' for change options!");
     }
 
     private void gameStop() {
@@ -158,7 +172,7 @@ public class GameModel implements ModelSubjectForObservers{
         this.notifyObservers();
     }
 
-
+    //getters and setters methods
 
     public int getFlagsCount() {
         return flagsCount;
@@ -197,14 +211,7 @@ public class GameModel implements ModelSubjectForObservers{
         this.notifyObservers();
     }
 
-    public void setGameParameters(GameParameters gameParameters) {
-        this.gameParameters = gameParameters;
-        this.minesField = new Cell[gameParameters.getFieldWidth()][gameParameters.getFieldHeight()];
-        this.setFieldSize(gameParameters.getFieldWidth(), gameParameters.getFieldHeight());
-        this.setCellsCount(gameParameters.getCellsCount());
-        this.setFlagsCount(gameParameters.getFlagsCount());
-        this.setMinesCount(gameParameters.getMinesCount());
-    }
+
 
     @Override
     public void registerObserver(ModelObserver observer) {

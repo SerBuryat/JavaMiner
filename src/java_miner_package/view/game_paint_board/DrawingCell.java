@@ -26,22 +26,22 @@ public class DrawingCell {
         this.cellHeight = cellHeight;
     }
 
-    void paintDrawingCell(Graphics g, int cellWidth, int cellHeight) {
+    void paintDrawingCell(Graphics graphics, int cellWidth, int cellHeight) {
         if(this.cell.getIsOpen()) {
-            g.setColor(this.openColor);
-            g.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
+            graphics.setColor(this.openColor);
+            graphics.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
             if(this.cell.getHasMine()) // has mine? -> paint mine
-                new Mine().paintDrawCellDecorator(g, this);
-            if(this.cell.getMineCounter()!= 0) // has counter? -> paint counter
-                new Counter(this.cell.getMineCounter()).paintDrawCellDecorator(g, this);
+                new Mine().paintCellDecorator(graphics, this);
+            if(this.cell.getMineCount()!= 0) // has counter? -> paint counter
+                new Counter(this.cell.getMineCount()).paintCellDecorator(graphics, this);
         } else {
-            g.setColor(this.closedColor);
-            g.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
+            graphics.setColor(this.closedColor);
+            graphics.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
             if(this.cell.getHasFlag()) // has flag? -> paint flag
-                new Flag().paintDrawCellDecorator(g, this);
+                new Flag().paintCellDecorator(graphics, this);
         }
-        g.setColor(this.bordersColor);
-        g.drawRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
+        graphics.setColor(this.bordersColor);
+        graphics.drawRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
     }
 
     public Cell getCell() {
@@ -66,7 +66,8 @@ public class DrawingCell {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " " + "x - " + this.x + " : " + "y - " + this.y + " Cell size : width - " + this.cellWidth + " " + "height : " + this.cellHeight;
+        return this.getClass().getSimpleName() + " " + "x - " + this.x + " : " + "y - " + this.y
+                + " Cell size : width - " + this.cellWidth + " " + "height : " + this.cellHeight;
     }
 
     public Color getBordersColor() {
@@ -76,12 +77,6 @@ public class DrawingCell {
     public Color getClosedColor() {
         return closedColor;
     }
-
-// --Commented out by Inspection START (25.11.2019 20:30):
-//   public Color getOpenColor() {
-//        return openColor;
-//   }
-// --Commented out by Inspection STOP (25.11.2019 20:30)
 
     public int getCellArc() {
         return cellArc;

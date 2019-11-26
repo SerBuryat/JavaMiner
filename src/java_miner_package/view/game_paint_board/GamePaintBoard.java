@@ -30,15 +30,15 @@ public class GamePaintBoard extends JPanel {
         this.loadPaintBoardControl();
     }
 
-    public void paint(Graphics g) { // drawing pain board
-        super.paint(g);
+    public void paint(Graphics graphics) { // drawing pain board
+        super.paint(graphics);
         this.requestFocus();
         for(int x = 0; x < this.fieldWidth; x++) {
             for(int y = 0; y < this.fieldHeight; y++) {
-                this.paintBoardField[x][y].paintDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
+                this.paintBoardField[x][y].paintDrawingCell(graphics, this.getDrawingCellWidth(), this.getDrawingCellHeight());
             }
         }
-        this.cellPointer.paintCurrentDrawingCell(g, this.getDrawingCellWidth(), this.getDrawingCellHeight());
+        this.cellPointer.paintCurrentDrawingCell(graphics, this.getDrawingCellWidth(), this.getDrawingCellHeight());
     }
 
     public DrawingCell[][] getPaintBoardField() {

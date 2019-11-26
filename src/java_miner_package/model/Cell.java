@@ -6,7 +6,7 @@ public class Cell {
     private boolean isOpen;
     private boolean hasMine;
     private boolean hasFlag;
-    private int mineCounter;
+    private int mineCount;
 
     public Cell(int x, int y) {
         this.x = x;
@@ -25,8 +25,8 @@ public class Cell {
         this.hasMine = true;
     }
 
-    void setMineCounter(int mineCounter) {
-        this.mineCounter = mineCounter;
+    void setMineCount(int mineCount) {
+        this.mineCount = mineCount;
     }
 
     public int getX() {
@@ -49,8 +49,8 @@ public class Cell {
         return this.hasFlag;
     }
 
-    public int getMineCounter() {
-        return mineCounter;
+    public int getMineCount() {
+        return mineCount;
     }
 
     @Override
