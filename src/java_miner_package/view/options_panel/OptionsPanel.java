@@ -1,6 +1,7 @@
 package java_miner_package.view.options_panel;
 
 import java_miner_package.MessageToUser;
+import java_miner_package.controller.input_control.InputTypeControl;
 import java_miner_package.controller.input_control.KeyBoardControl;
 import java_miner_package.controller.input_control.MouseControl;
 import java_miner_package.model.GameParameters;
@@ -118,27 +119,32 @@ public class OptionsPanel extends JPanel {
     }
 
     private void applyButtonAction() {
-        //if width and height == "" -> load default gameParameters values
-        int width = (this.fieldWidthTextField.getText().equals("")) ? this.mainWindow.getGameController().getGameParameters().getFieldWidth() : Integer.parseInt(this.fieldWidthTextField.getText()); // board with
-        int height = (this.fieldHeightTextField.getText().equals("")) ? this.mainWindow.getGameController().getGameParameters().getFieldHeight() : Integer.parseInt(this.fieldHeightTextField.getText()); // board height
+        int width = (this.fieldWidthTextField.getText().equals(""))
+                ? this.mainWindow.getGameController().getGameParameters().getFieldWidth()
+                : Integer.parseInt(this.fieldWidthTextField.getText());
+        int height = (this.fieldHeightTextField.getText().equals(""))
+                ? this.mainWindow.getGameController().getGameParameters().getFieldHeight()
+                : Integer.parseInt(this.fieldHeightTextField.getText());
 
-        if(!(this.checkFieldSizeNumbers(width, height))) { // return if wrong diapason of numbers
+        if(!(this.checkFieldSizeNumbers(width, height))) {
             return;
         }
 
-        LevelDifficulty levelDifficulty = LevelDifficulty.EASY;
-        for(JCheckBox levelDiffCheckBox : this.levelDiffCheckBoxList) { // set level difficulty
+        LevelDifficulty levelDifficulty = null;
+        for(JCheckBox levelDiffCheckBox : this.levelDiffCheckBoxList) {
             if(levelDiffCheckBox.isSelected()) {
                 levelDifficulty = LevelDifficulty.valueOf(levelDiffCheckBox.getText());
                 break;
             }
         }
-        GameParameters newGameParameters = new GameParameters(width, height, levelDifficulty);
 
+        InputTypeControl inputTypeControl = null;
         if(this.mouseControlCheckBox.isSelected())
-            newGameParameters.setInputControlType(new MouseControl(mainWindow.getGameController()));
+            inputTypeControl = new MouseControl(mainWindow.getGameController());
         if(this.keyBoardControlCheckBox.isSelected())
-            newGameParameters.setInputControlType(new KeyBoardControl(mainWindow.getGameController()));
+            inputTypeControl = new KeyBoardControl(mainWindow.getGameController());
+
+        GameParameters newGameParameters = new GameParameters(width, height, levelDifficulty, inputTypeControl);
 
         mainWindow.getGameController().setGameParameters(newGameParameters); // load new game parameters
         mainWindow.getGameController().startGame();// initializing game

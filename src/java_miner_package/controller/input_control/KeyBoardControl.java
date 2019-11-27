@@ -34,8 +34,8 @@ public class KeyBoardControl extends InputTypeControl implements KeyListener{
             case KeyEvent.VK_DOWN:
                 super.gameController.moveCellPointerDown(super.cellPointer);
                 break;
-            case KeyEvent.VK_ENTER:
-                super.gameController.openAllCells();
+            case KeyEvent.VK_SPACE:
+                super.gameController.openCell(this.cellPointer);
                 break;
             case KeyEvent.VK_F:
                 super.gameController.setFlag(cellPointer);

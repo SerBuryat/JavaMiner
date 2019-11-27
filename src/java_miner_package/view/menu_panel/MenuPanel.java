@@ -14,8 +14,8 @@ import java.util.Scanner;
 
 public class MenuPanel extends JPanel  {
 
-    public MenuPanel(MainWindow mainWindow) { // initializing game start menu
-        // panel and components initializing
+    public MenuPanel(MainWindow mainWindow) {
+        // panel components initializing
         JLabel menuTitle = new JLabel("Java Miner");
 
         JCheckBox checkBoxEasy = new JCheckBox("EASY(10x10 field, 10 mines)");
@@ -33,9 +33,9 @@ public class MenuPanel extends JPanel  {
                 if(checkBox.isSelected()) {
                     checkBox.setEnabled(false);// after selecting make this disable
                     Scanner scanner = new Scanner(checkBox.getText().replaceAll("[^0-9]+", " ")); // remains only numbers
-                    InputTypeControl inputTypeControl = mainWindow.getGameController().getGameParameters().getInputControlType(); // take old input control
-                    mainWindow.getGameController().setGameParameters(new GameParameters(scanner.nextInt(), scanner.nextInt(), scanner.nextInt())); // load 3 numbers from getText() to game parameters
-                    mainWindow.getGameController().getGameParameters().setInputControlType(inputTypeControl);// set old input control for new GameParameters
+                    mainWindow.getGameController().
+                            setGameParameters(new GameParameters(scanner.nextInt(), scanner.nextInt(), scanner.nextInt(),
+                                    mainWindow.getGameController().getGameParameters().getInputControlType()));
                     checkBoxList.remove(checkBox);
                     for(JCheckBox checkB : checkBoxList) { // set other !selected && enable
                         checkB.setSelected(false);

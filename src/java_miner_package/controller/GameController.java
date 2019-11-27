@@ -1,5 +1,6 @@
 package java_miner_package.controller;
 
+import java_miner_package.controller.input_control.MouseControl;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
 import java_miner_package.view.game_paint_board.CellPointer;
@@ -14,10 +15,10 @@ public class GameController {
     private GamePaintBoard gamePaintBoard;
     private GameParameters gameParameters;
 
-    public GameController(GameModel gameModel, GameParameters gameParameters) {
-        this.gameModel = gameModel;
-        this.gameParameters = gameParameters;
-        this.mainWindow = new MainWindow(this, this.gameModel); // create game window (frame)
+    public GameController() {
+        this.gameParameters = new GameParameters(new MouseControl(this)); // sets MouseControl by default
+        this.gameModel = new GameModel(this.gameParameters);
+        this.mainWindow = new MainWindow(this, this.gameModel);
     }
 
     public void startGame() {

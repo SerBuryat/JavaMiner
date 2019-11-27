@@ -12,21 +12,33 @@ public class GameParameters {
     private LevelDifficulty levelDifficulty;
     private InputTypeControl inputControlType;
 
-    public GameParameters(int fieldWidth, int fieldHeight, LevelDifficulty levelDifficulty) {
+    public GameParameters(InputTypeControl inputControlType) { // default parameters constructor (10x10 table, EASY level difficulty)
+        this.levelDifficulty = LevelDifficulty.EASY;
+        this.fieldWidth = 10;
+        this.fieldHeight = 10;
+        this.blocksCount = this.fieldWidth * this.fieldHeight;
+        this.minesCount = (int) (this.blocksCount * this.levelDifficulty.getValue());
+        this.flagsCount = minesCount;
+        this.inputControlType = inputControlType;
+    }
+
+    public GameParameters(int fieldWidth, int fieldHeight, LevelDifficulty levelDifficulty, InputTypeControl inputControlType) {
         this.levelDifficulty = levelDifficulty;
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
         this.minesCount = (int) (this.blocksCount * levelDifficulty.getValue());
         this.flagsCount = this.minesCount;
+        this.inputControlType = inputControlType;
     }
 
-    public GameParameters(int fieldWidth, int fieldHeight, int minesCount) {
+    public GameParameters(int fieldWidth, int fieldHeight, int minesCount, InputTypeControl inputControlType) {
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
         this.minesCount = minesCount;
         this.flagsCount = this.minesCount;
+        this.inputControlType = inputControlType;
     }
 
     public int getFieldHeight() {
@@ -47,10 +59,6 @@ public class GameParameters {
 
     int getCellsCount() {
         return blocksCount;
-    }
-
-    public void setInputControlType(InputTypeControl inputControlType) {
-        this.inputControlType = inputControlType;
     }
 
     public InputTypeControl getInputControlType() {
