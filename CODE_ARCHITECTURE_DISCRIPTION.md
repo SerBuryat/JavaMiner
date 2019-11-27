@@ -136,6 +136,12 @@ Control and make 'work' Model and View together.
 
 #### *input_control package*
 
+- **InputTypeControl** *class* - abstract extends when you need a new control game type (see MouseControl class or KeyBoard control class).
+
+- **MouseControl** *class* - represent input control type in the game by mouse.
+
+- **KeyBoardControl** *class* - represent input control type in the game by keyboard.
+
 #### *GameController class*
 
 Represent a main controller : 
