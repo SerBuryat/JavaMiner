@@ -27,7 +27,7 @@ Here is located .png **image resousace**
    - **game_paint_board** *package*
      - **cell_decorator** *package*
        - **Counter** *class*
-       - **DrawCellDecorator** *class*
+       - **CellDecorator** *class*
        - **Flag** *class*
        - **Mine** *class*
      - **CellPointer** *class*
@@ -93,10 +93,10 @@ All game view-represantation located in this *package*.
 Contains classes for 'drawing game'.
 
 - **cell_decorator** *package* - has entities for drawing:
-  - flag
-  - counter
-  - mine
-  - drawCellDecorator
+  - Flag
+  - Counter
+  - Mine
+  - CellDecorator
 
 - **GamePaintBoard** *class* - drawing minefield and everything on it(open cells, close cells, mines, flags, etc.)
 
@@ -135,6 +135,12 @@ Represent main frame of application. Every panel loading here.
 Control and make 'work' Model and View together. 
 
 #### *input_control package*
+
+- **InputTypeControl** *class* - abstract extends when you need a new control game type (see MouseControl class or KeyBoard control class).
+
+- **MouseControl** *class* - represent input control type in the game by mouse.
+
+- **KeyBoardControl** *class* - represent input control type in the game by keyboard.
 
 #### *GameController class*
 
