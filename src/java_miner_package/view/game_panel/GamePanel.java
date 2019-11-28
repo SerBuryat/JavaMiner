@@ -13,10 +13,10 @@ public class GamePanel extends JPanel {
 
     public GamePanel(MainWindow mainWindow) {
         // panel and components initializing
-        GameStatusBoard gameStatusBoard = new GameStatusBoard(mainWindow.getGameModel());
+        GameStatusBoard gameStatusBoard = new GameStatusBoard(mainWindow.getGameModel());// panels
         GamePaintBoard gamePaintBoard = mainWindow.getGameController().getGamePaintBoard();
 
-        JButton restartGameButton = new JButton("Restart game");
+        JButton restartGameButton = new JButton("Restart game"); // buttons
         JButton backToMenuButton = new JButton("Back to menu");
         restartGameButton.addActionListener(action -> {
             mainWindow.getGameController().startGame();

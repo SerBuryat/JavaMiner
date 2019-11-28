@@ -11,7 +11,8 @@ Command line: C:\(name project folder)\JavaMiner\src\java_miner_package> java Ja
 ```
 ## Game Rules
 You are presented with a board of squares. Some squares contain mines (bombs), others don't. 
-If you click on a square containing a bomb, you lose. If you manage to click all the squares (without clicking on any bombs) you win.
+If you click on a square containing a bomb, you lose. 
+If you manage to click all the squares (without clicking on any bombs) you win.
 Clicking a square which doesn't have a bomb reveals the number of neighbouring squares containing bombs.
 Use this information plus some guess work to avoid the bombs.
 ## Game Status

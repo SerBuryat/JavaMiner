@@ -21,7 +21,7 @@ public class GameStatusBoard extends JPanel implements ActionListener,ModelObser
     private final int fontSize = 22;
     private final int iconSize = 30;
 
-    GameStatusBoard(GameModel gameModel) { // not a flexible panel, need to regroup a panel after making changes
+    GameStatusBoard(GameModel gameModel) {
         // panel and components initializing
         Font font = new Font("Serif", Font.PLAIN, this.fontSize);
         this.gameTimer = new GameTimer(this);
@@ -30,11 +30,11 @@ public class GameStatusBoard extends JPanel implements ActionListener,ModelObser
         this.minesCount = this.labelCreator("x " + gameModel.getMinesCount(), ImageResources.MINE, font);
         this.cellsCount = this.labelCreator("x " + gameModel.getCellsCount(), font);
         //panel layout configs
-        this.setLayout(new GridLayout(4,1)); // change if need more components in status bar
         this.add(this.timerCount);
         this.add(this.flagsCount);
         this.add(this.minesCount);
         this.add(this.cellsCount);
+        this.setLayout(new GridLayout(this.getComponents().length,1));
         gameModel.registerObserver(this);
     }
 
@@ -69,11 +69,15 @@ public class GameStatusBoard extends JPanel implements ActionListener,ModelObser
     @Override
     public void paintComponent(Graphics g) { // drawing icon block
         super.paintComponent(g);
-        DrawingCell drawBlock = new DrawingCell(new Cell(this.cellsCount.getX(), this.cellsCount.getY() + this.fontSize), this.iconSize, this.iconSize);
+        DrawingCell drawBlock = new DrawingCell
+                (new Cell(this.cellsCount.getX(), this.cellsCount.getY() + this.fontSize), this.iconSize,
+                        this.iconSize);
         g.setColor(drawBlock.getClosedColor());
-        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellWidth(), drawBlock.getCellHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
+        g.fillRoundRect(drawBlock.getX(), drawBlock.getY(),
+                drawBlock.getCellWidth(), drawBlock.getCellHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
         g.setColor(drawBlock.getBordersColor());
-        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(), drawBlock.getCellWidth(), drawBlock.getCellHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
+        g.drawRoundRect(drawBlock.getX(), drawBlock.getY(),
+                drawBlock.getCellWidth(), drawBlock.getCellHeight(), drawBlock.getCellArc(), drawBlock.getCellArc());
     }
 
     @Override

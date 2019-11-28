@@ -12,15 +12,13 @@ import java_miner_package.view.menu_panel.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class OptionsPanel extends JPanel {
     private final MainWindow mainWindow;
-    private final Map<Component, Component> componentPairs = new HashMap<>();
     private final JTextField fieldWidthTextField;
     private final JTextField fieldHeightTextField;
     private final List<JCheckBox> inputControlCheckBoxesList;
@@ -44,65 +42,58 @@ public class OptionsPanel extends JPanel {
 
         this.mouseControlCheckBox = new JCheckBox("Mouse Control");// controlCheckBoxes
         this.keyBoardControlCheckBox = new JCheckBox("KeyBoard Control");
-
         this.inputControlCheckBoxesList = Arrays
                 .stream(new JCheckBox[]{this.mouseControlCheckBox, this.keyBoardControlCheckBox})
                 .collect(Collectors.toList());
         this.turnOffOtherCheckBoxesIfOneSelected(this.inputControlCheckBoxesList);
 
-
         JCheckBox checkBoxEasy = new JCheckBox("EASY"); // levelDifficultyCheckBoxes
         JCheckBox checkBoxMiddle = new JCheckBox("MIDDLE");
         JCheckBox checkBoxHard = new JCheckBox("HARD");
-
         this.levelDiffCheckBoxList = Arrays.stream(new JCheckBox[]{checkBoxEasy, checkBoxMiddle, checkBoxHard})
                 .collect(Collectors.toList());
         this.turnOffOtherCheckBoxesIfOneSelected(this.levelDiffCheckBoxList);
 
-        JPanel checkBoxes = this.createLevelDifficultyCheckBoxesPanel(this.levelDiffCheckBoxList);
-        JPanel infoPanel = this.createLevelDifficultyDescriptionPanel(LevelDifficulty.values());
+        JPanel checkBoxes = this.createInnerPanel
+                (this.levelDiffCheckBoxList.toArray(new JCheckBox[this.levelDiffCheckBoxList.size()]));
+        JPanel infoPanel =
+                this.createInnerPanel(this.getLabelsLevelDifficultyDescription(LevelDifficulty.values()));
 
         JButton applyOptionsButton = new JButton("APPLY"); // Buttons
         JButton cancelOptionsButton = new JButton("CANCEL");
         applyOptionsButton.addActionListener(action -> this.applyButtonAction());
-        cancelOptionsButton.addActionListener(action -> { // back to menu
-            mainWindow.loadPanelToMainWindow(new MenuPanel(mainWindow));
-        });
+        cancelOptionsButton.addActionListener(action -> mainWindow.loadPanelToMainWindow(new MenuPanel(mainWindow)));
 
         // panel layout configs
-        // left argument -> to left cell of grid table ... right -> to right
-        this.addComponentsInGridTableByPairs(labelWidth, this.fieldWidthTextField);
-        this.addComponentsInGridTableByPairs(labelHeight, this.fieldHeightTextField);
-        this.addComponentsInGridTableByPairs(labelLevelDifficulty, checkBoxes);
-        this.addComponentsInGridTableByPairs(new JLabel("INFO: "), infoPanel);
-        this.addComponentsInGridTableByPairs(mouseControlCheckBox, keyBoardControlCheckBox);
-        this.addComponentsInGridTableByPairs(applyOptionsButton, cancelOptionsButton);
+        Component[][] componentsPairs = {
+                {labelWidth, this.fieldWidthTextField},
+                {labelHeight, this.fieldHeightTextField},
+                {labelLevelDifficulty, checkBoxes},
+                {new JLabel("INFO: "), infoPanel},
+                {mouseControlCheckBox, keyBoardControlCheckBox},
+                {applyOptionsButton, cancelOptionsButton}
+        };
+        this.loadComponentsOnPanel(componentsPairs);
 
-        this.setLayout(new GridLayout(this.componentPairs.size(), 2));
+        this.setLayout(new GridLayout(componentsPairs.length, 2));
 
         this.setUpFontForComponents(this.getComponents());
     }
 
     private void applyButtonAction() {
-        // load default size if text fields -> ""
-        int width = (this.fieldWidthTextField.getText().equals(""))
-                ? this.mainWindow.getGameController().getGameParameters().getFieldWidth()
-                : Integer.parseInt(this.fieldWidthTextField.getText());
-        int height = (this.fieldHeightTextField.getText().equals(""))
-                ? this.mainWindow.getGameController().getGameParameters().getFieldHeight()
-                : Integer.parseInt(this.fieldHeightTextField.getText());
-        if(!(this.checkFieldSizeNumbers(width, height))) {
-            return;
+        int width = this.getSizeFromTextField(this.fieldWidthTextField);
+        int height = this.getSizeFromTextField(this.fieldHeightTextField);
+
+        if(this.isCorrectSize(width, height)) {
+            LevelDifficulty levelDifficulty = this.getLevelDifficulty(this.levelDiffCheckBoxList);
+            InputTypeControl inputTypeControl = getInputTypeControl(this.inputControlCheckBoxesList);
+
+            GameParameters newGameParameters = new GameParameters(width, height, levelDifficulty, inputTypeControl);
+
+            mainWindow.getGameController().setGameParameters(newGameParameters); // load new game parameters
+            mainWindow.getGameController().startGame();// initializing game
+            mainWindow.loadPanelToMainWindow(new GamePanel(mainWindow));// load game field
         }
-
-        LevelDifficulty levelDifficulty = this.getLevelDifficulty(this.levelDiffCheckBoxList);
-        InputTypeControl inputTypeControl = getInputTypeControl(this.inputControlCheckBoxesList);
-
-        GameParameters newGameParameters = new GameParameters(width, height, levelDifficulty, inputTypeControl);
-
-        mainWindow.getGameController().setGameParameters(newGameParameters); // load new game parameters
-        mainWindow.getGameController().startGame();// initializing game
-        mainWindow.loadPanelToMainWindow(new GamePanel(mainWindow));// load game field
     }
 
     private JTextField createTextFieldWithCharLimit(int limit) {
@@ -115,13 +106,17 @@ public class OptionsPanel extends JPanel {
         Arrays.stream(components).forEach(component -> component.setFont(this.font));
     }
 
-    private void addComponentsInGridTableByPairs(Component left, Component right) {
-        this.componentPairs.put(left, right);
+    private void loadComponentsOnPanel(Component[][] componentsPairs) {
+        for (Component[] components : componentsPairs)
+            this.addComponentsByPairs(components[0], components[1]);
+    }
+
+    private void addComponentsByPairs(Component left, Component right) {
         this.add(left);
         this.add(right);
     }
 
-    private boolean checkFieldSizeNumbers(int width, int height) {
+    private boolean isCorrectSize(int width, int height) {
         if(width < 10 || height < 10) {
             MessageToUser.getMessage("Numbers from 10 to 30 available");
             return false;
@@ -157,21 +152,11 @@ public class OptionsPanel extends JPanel {
         }
     }
 
-    private JPanel createLevelDifficultyDescriptionPanel(LevelDifficulty[] difficulties) {
+    private JPanel createInnerPanel(Component[] components) {
         JPanel panel = new JPanel(new GridLayout());
 
-        for(LevelDifficulty levelDifficulty : difficulties) {
-            panel.add(new JLabel(levelDifficulty.getDescription()));
-        }
-
-        return panel;
-    }
-
-    private JPanel createLevelDifficultyCheckBoxesPanel(List<JCheckBox> checkBoxList) {
-        JPanel panel = new JPanel(new GridLayout());
-
-        for(JCheckBox checkBox : checkBoxList)
-            panel.add(checkBox);
+        for(Component component : components)
+            panel.add(component);
 
         return panel;
     }
@@ -198,5 +183,20 @@ public class OptionsPanel extends JPanel {
         }
 
         return inputTypeControl;
+    }
+
+    private int getSizeFromTextField(JTextField textField) {
+        if(textField.getText().isEmpty())
+            return this.mainWindow.getGameController().getGameParameters().getFieldWidth();
+        else
+            return Integer.parseInt(textField.getText());
+    }
+
+    private JLabel[] getLabelsLevelDifficultyDescription(LevelDifficulty[] levelDifficulties) {
+        List<JLabel> labels = new ArrayList<>();
+        for(LevelDifficulty levelDifficulty : levelDifficulties)
+            labels.add(new JLabel(levelDifficulty.getDescription()));
+
+        return labels.toArray(new JLabel[labels.size()]);
     }
 }

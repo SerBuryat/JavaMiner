@@ -3,11 +3,13 @@ Here is an explanation of the code architecture (Packages, Classes, etc. . Their
 
 ## Code hierarchy overview
 Project has built on the MVC pattern.
-- *Model* - Model represents an object of carrying data, also have logic to update controller if its data changes.
+- *Model* - Model represents an object of carrying data, 
+also have logic to update controller if its data changes.
 
 - *View* - View represents the visualization of the data that model contains.
 
-- *Controller* - Controller acts on both model and view. It controls the data flow into model object and updates the view whenever data changes. 
+- *Controller* - Controller acts on both model and view. 
+It controls the data flow into model object and updates the view whenever data changes. 
 
 ### *java_miner_package* 
 **All source code** located here 

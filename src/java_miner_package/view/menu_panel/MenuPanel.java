@@ -1,5 +1,6 @@
 package java_miner_package.view.menu_panel;
 
+import java_miner_package.controller.input_control.InputTypeControl;
 import java_miner_package.model.GameParameters;
 import java_miner_package.view.MainWindow;
 import java_miner_package.view.game_panel.GamePanel;
@@ -27,7 +28,7 @@ public class MenuPanel extends JPanel  {
 
         List<JCheckBox> checkBoxList = Arrays.stream(new JCheckBox[]{checkBoxEasy, checkBoxMiddle, checkBoxHard})
                 .collect(Collectors.toList());
-        this.levelDifficultyCheckBoxAction(checkBoxList);
+        this.setCheckBoxesAction(checkBoxList);
 
 
         JButton menuStartButton = new JButton("Start game");
@@ -68,20 +69,18 @@ public class MenuPanel extends JPanel  {
         this.add(buttons, gbc);
     }
 
-    private void levelDifficultyCheckBoxAction(List<JCheckBox> checkBoxList) {
+    private void setCheckBoxesAction(List<JCheckBox> checkBoxList) {
         checkBoxList.get(0).setSelected(true);
         checkBoxList.get(0).setEnabled(false);
 
         for(JCheckBox checkBox : checkBoxList) {
-            checkBox.addActionListener(action -> { // create new gameParameters by .getText()
+            checkBox.addActionListener(action -> {
                 if(checkBox.isSelected()) {
-                    checkBox.setEnabled(false);// after selecting make this disable
-                    Scanner scanner = new Scanner(checkBox.getText().replaceAll("[^0-9]+", " ")); // remains only numbers
-                    mainWindow.getGameController().
-                            setGameParameters(new GameParameters(scanner.nextInt(), scanner.nextInt(), scanner.nextInt(),
-                                    mainWindow.getGameController().getGameParameters().getInputControlType()));
+                    this.setNewGameParameter(this.getNewGameParametersByCheckBoxText(checkBox));
+
+                    checkBox.setEnabled(false);
                     checkBoxList.remove(checkBox);
-                    for(JCheckBox checkB : checkBoxList) { // set other !selected && enable
+                    for (JCheckBox checkB : checkBoxList) {
                         checkB.setSelected(false);
                         checkB.setEnabled(true);
                     }
@@ -89,5 +88,23 @@ public class MenuPanel extends JPanel  {
                 }
             });
         }
+    }
+
+    private Scanner getScannerWithOnlyNumber(String text) {
+       return new Scanner(text.replaceAll("[^0-9]+", " "));
+    }
+
+    private GameParameters getNewGameParametersByCheckBoxText(JCheckBox checkBox) {
+        Scanner scanner = this.getScannerWithOnlyNumber(checkBox.getText());
+        int width = scanner.nextInt();
+        int height = scanner.nextInt();
+        int mineCount = scanner.nextInt();
+        InputTypeControl inputTypeControl = mainWindow.getGameController().getGameParameters().getInputControlType();
+
+        return new GameParameters(width, height, mineCount, inputTypeControl);
+    }
+
+    private void setNewGameParameter(GameParameters gameParameter) {
+        this.mainWindow.getGameController().setGameParameters(gameParameter);
     }
 }
