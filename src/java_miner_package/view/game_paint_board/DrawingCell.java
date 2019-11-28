@@ -28,20 +28,31 @@ public class DrawingCell {
 
     void paintDrawingCell(Graphics graphics, int cellWidth, int cellHeight) {
         if(this.cell.getIsOpen()) {
-            graphics.setColor(this.openColor);
-            graphics.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
-            if(this.cell.getHasMine()) // has mine? -> paint mine
-                new Mine().paintCellDecorator(graphics, this);
-            if(this.cell.getMineCount()!= 0) // has counter? -> paint counter
-                new Counter(this.cell.getMineCount()).paintCellDecorator(graphics, this);
+            this.paintOpenDrawingCell(graphics, cellWidth, cellHeight);
         } else {
-            graphics.setColor(this.closedColor);
-            graphics.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
-            if(this.cell.getHasFlag()) // has flag? -> paint flag
-                new Flag().paintCellDecorator(graphics, this);
+            this.paintClosedDrawingCell(graphics, cellWidth, cellHeight);
         }
         graphics.setColor(this.bordersColor);
         graphics.drawRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
+    }
+
+    private void paintOpenDrawingCell(Graphics graphics, int cellWidth, int cellHeight) {
+        this.paintDrawingCellFrame(graphics, cellWidth, cellHeight, this.openColor);
+        if(this.cell.getHasMine())
+            new Mine().paintCellDecorator(graphics, this);
+        if(this.cell.getMineCount()!= 0)
+            new Counter(this.cell.getMineCount()).paintCellDecorator(graphics, this);
+    }
+
+    private void paintClosedDrawingCell(Graphics graphics, int cellWidth, int cellHeight) {
+        this.paintDrawingCellFrame(graphics, cellWidth, cellHeight, this.closedColor);
+        if(this.cell.getHasFlag())
+            new Flag().paintCellDecorator(graphics, this);
+    }
+
+    private void paintDrawingCellFrame(Graphics graphics, int cellWidth, int cellHeight, Color color) {
+        graphics.setColor(color);
+        graphics.fillRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, this.cellArc, this.cellArc);
     }
 
     public Cell getCell() {

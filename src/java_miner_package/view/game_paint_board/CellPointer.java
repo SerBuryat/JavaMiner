@@ -19,8 +19,8 @@ public class CellPointer {
         this.gameParameters = gameParameters;
     }
 
-    void paintCurrentDrawingCell(Graphics g, int cellWidth, int cellHeight) {
-        Graphics2D g2 = (Graphics2D) g.create();
+    void paintCellPointer(Graphics graphics, int cellWidth, int cellHeight) {
+        Graphics2D g2 = (Graphics2D) graphics.create();
         g2.setColor(Color.RED);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, 10, 10);

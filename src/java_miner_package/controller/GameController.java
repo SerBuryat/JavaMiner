@@ -42,11 +42,6 @@ public class GameController {
         this.repaintGamePaintBoard();
     }
 
-    public void openAllCells() {
-        this.gameModel.openAllCells();
-        this.repaintGamePaintBoard();
-    }
-
     public void setFlag(CellPointer cellPointer) {
         for(DrawingCell[] arr : this.gamePaintBoard.getPaintBoardField()) {
             for(DrawingCell drawingCell : arr) {
