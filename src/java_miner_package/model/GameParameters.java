@@ -7,9 +7,9 @@ public class GameParameters {
     private final int fieldWidth;
     private final int fieldHeight;
     private final int blocksCount;
-    private int flagsCount;
-    private int minesCount;
-    private InputTypeControl inputControlType;
+    private final int flagsCount;
+    private final int minesCount;
+    private final InputTypeControl inputControlType;
 
     // default parameter constructor
     public GameParameters(InputTypeControl inputControlType) {

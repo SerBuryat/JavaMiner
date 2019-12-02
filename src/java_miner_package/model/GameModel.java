@@ -60,7 +60,7 @@ public class GameModel implements ModelSubjectForObservers{
         }
     }
 
-    public void openAllCells() { /// for test
+    private void openAllCells() {
         for(Cell[] arr : this.minesField) {
             for(Cell cell : arr) {
                 cell.setOpen();

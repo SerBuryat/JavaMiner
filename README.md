@@ -29,18 +29,18 @@ Current game status:
 - To open a square, point at the square and click on it. 
 - To mark a square you think is a bomb, point and right-click.
 ##### KeyBoard
-- To navigate cell poiner use arrows.
+- To navigate cell pointer use arrows.
 - To open a square press Space. 
 - To mark a square you think is a bomb, press F. 
 ##### Buttons
 - Click 'Restart game' for restart current game.
 - Click 'Back to menu' for going to main menu.
-- Click 'Options' to change game parameters manualy.
-- Click 'Accept' or 'Cancel' for accept or cancel manualy game parameters.
+- Click 'Options' to change game parameters manually.
+- Click 'Accept' or 'Cancel' for accept or cancel manually game parameters.
 
 
 ## Code Architecture
-To see code architecture description, open [CODE_ARCHITECTURE_DISCRIPTION.md](CODE_ARCHITECTURE_DISCRIPTION.md).
+To see code architecture description, open [CODE_ARCHITECTURE_DESCRIPTION.md](CODE_ARCHITECTURE_DESCRIPTION.md).
 
 ## Author
 

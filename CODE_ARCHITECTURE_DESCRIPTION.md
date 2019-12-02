@@ -15,7 +15,7 @@ It controls the data flow into model object and updates the view whenever data c
 **All source code** located here 
 
 ### *assets*
-Here is located .png **image resousace**
+Here is located .png **image resource**
 
 ### Overview *java_miner_package* hierarchy 
 1. **model** *package*
@@ -89,7 +89,7 @@ In this project *Subject* is GameModel gives an info about changing some data (c
 
 
 ### 2.*view* *package*
-All game view-represantation located in this *package*. 
+All game view-representation located in this *package*. 
 
 #### *game_paint_board package*
 Contains classes for 'drawing game'.
@@ -102,14 +102,14 @@ Contains classes for 'drawing game'.
 
 - **GamePaintBoard** *class* - drawing minefield and everything on it(open cells, close cells, mines, flags, etc.)
 
-- **DrawingCell** *class* - for represnting Cell(model entity) on GamePaintBoard.
+- **DrawingCell** *class* - for representing Cell(model entity) on GamePaintBoard.
 
-- **CellPointer** *class* - pointer for input controller which 'walking' on minesfield and user control it by mouse or keyboard.
+- **CellPointer** *class* - pointer for input controller which 'walking' on minesField and user control it by mouse or keyboard.
 
 #### *game_panel package*
-Contains classes for represent game panel (loading when game strats)
+Contains classes for represent game panel (loading when game starts)
 
-- **GamePanel** *class* - show gamefield after game starts
+- **GamePanel** *class* - show gameField after game starts
 
 - **GameStatusBoard** *class* - show game status (count of flags or close cells , timer or else)
 
@@ -122,11 +122,11 @@ Contains classes for represent game panel (loading when game strats)
 
 - **OptionsPanel** *class* - show game options for change game parameters manually
 
-- **JTextFieldLogic** *class* - logic for textfield from OptionsPanel (to check input data corectness)
+- **JTextFieldLogic** *class* - logic for textField from OptionsPanel (to check input data correctness)
 
 #### *ImageResources class*
 
-Has static fields whic representing .png images for mine, flag, cell, etc.
+Has static fields which representing .png images for mine, flag, cell, etc.
 
 #### *MainWindow class*
 
@@ -149,7 +149,7 @@ Control and make 'work' Model and View together.
 Represent a main controller : 
 - Initialize and start game (model and view representation together)
 - Repaint GamePaintBoard after 'actions' (set flag, open cell, pointer moves, etc.)
-- Move CellPoiner which controlling by user
+- Move CellPointer which controlling by user
 
 #### *GameTimer class*
 

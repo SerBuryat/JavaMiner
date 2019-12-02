@@ -123,7 +123,8 @@ public class OptionsPanel extends JPanel {
         if(minesCount >= minMinesCount && minesCount <= maxMinesCount)
             return true;
         else {
-            MessageToUser.getMessage("Wrong number of mines. Diapason for this width and height: " + "min - " + minMinesCount + " : " + "max -" + maxMinesCount);
+            MessageToUser.getMessage("Wrong number of mines. Diapason for this width and height: "
+                    + "min - " + minMinesCount + " : " + "max -" + maxMinesCount);
             return false;
         }
     }
