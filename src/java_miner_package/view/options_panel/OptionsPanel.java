@@ -5,26 +5,24 @@ import java_miner_package.controller.input_control.InputTypeControl;
 import java_miner_package.controller.input_control.KeyBoardControl;
 import java_miner_package.controller.input_control.MouseControl;
 import java_miner_package.model.GameParameters;
-import java_miner_package.model.LevelDifficulty;
 import java_miner_package.view.MainWindow;
 import java_miner_package.view.game_panel.GamePanel;
 import java_miner_package.view.menu_panel.MenuPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class OptionsPanel extends JPanel {
     private final MainWindow mainWindow;
-    private final JTextField fieldWidthTextField;
-    private final JTextField fieldHeightTextField;
+    private final JTextField widthTextField;
+    private final JTextField heightTextField;
+    private final JTextField minesCountTextField;
     private final List<JCheckBox> inputControlCheckBoxesList;
     private final JCheckBox mouseControlCheckBox;
     private final JCheckBox keyBoardControlCheckBox;
-    private final List<JCheckBox> levelDiffCheckBoxList;
     private final Font font = new Font("Serif", Font.PLAIN, 40);
 
     public OptionsPanel(MainWindow mainWindow) {
@@ -33,31 +31,18 @@ public class OptionsPanel extends JPanel {
 
         JLabel labelWidth = new JLabel("WIDTH:"); // labels
         JLabel labelHeight = new JLabel("HEIGHT:");
-        JLabel labelLevelDifficulty = new JLabel("DIFFICULTY LEVEL: ");
+        JLabel labelMinesCount = new JLabel("MINES COUNT:");
 
-        this.fieldWidthTextField = this.createTextFieldWithCharLimit(2);// textFields
-        this.fieldHeightTextField = this.createTextFieldWithCharLimit(2);
-        this.fieldWidthTextField.setText(String.valueOf(mainWindow.getGameController().getGameParameters().getFieldWidth()));
-        this.fieldHeightTextField.setText(String.valueOf(mainWindow.getGameController().getGameParameters().getFieldHeight()));
+        this.widthTextField = this.createTextFieldWithCharLimit(2);// textFields
+        this.heightTextField = this.createTextFieldWithCharLimit(2);
+        this.minesCountTextField = this.createTextFieldWithCharLimit(3);
 
         this.mouseControlCheckBox = new JCheckBox("Mouse Control");// controlCheckBoxes
         this.keyBoardControlCheckBox = new JCheckBox("KeyBoard Control");
         this.inputControlCheckBoxesList = Arrays
                 .stream(new JCheckBox[]{this.mouseControlCheckBox, this.keyBoardControlCheckBox})
                 .collect(Collectors.toList());
-        this.turnOffOtherCheckBoxesIfOneSelected(this.inputControlCheckBoxesList);
-
-        JCheckBox checkBoxEasy = new JCheckBox("EASY"); // levelDifficultyCheckBoxes
-        JCheckBox checkBoxMiddle = new JCheckBox("MIDDLE");
-        JCheckBox checkBoxHard = new JCheckBox("HARD");
-        this.levelDiffCheckBoxList = Arrays.stream(new JCheckBox[]{checkBoxEasy, checkBoxMiddle, checkBoxHard})
-                .collect(Collectors.toList());
-        this.turnOffOtherCheckBoxesIfOneSelected(this.levelDiffCheckBoxList);
-
-        JPanel checkBoxes = this.createInnerPanel
-                (this.levelDiffCheckBoxList.toArray(new JCheckBox[this.levelDiffCheckBoxList.size()]));
-        JPanel infoPanel =
-                this.createInnerPanel(this.getLabelsLevelDifficultyDescription(LevelDifficulty.values()));
+        this.setOneCheckBoxSelectedAtSameTime(this.inputControlCheckBoxesList);
 
         JButton applyOptionsButton = new JButton("APPLY"); // Buttons
         JButton cancelOptionsButton = new JButton("CANCEL");
@@ -66,10 +51,9 @@ public class OptionsPanel extends JPanel {
 
         // panel layout configs
         Component[][] componentsPairs = {
-                {labelWidth, this.fieldWidthTextField},
-                {labelHeight, this.fieldHeightTextField},
-                {labelLevelDifficulty, checkBoxes},
-                {new JLabel("INFO: "), infoPanel},
+                {labelWidth, this.widthTextField},
+                {labelHeight, this.heightTextField},
+                {labelMinesCount, this.minesCountTextField},
                 {mouseControlCheckBox, keyBoardControlCheckBox},
                 {applyOptionsButton, cancelOptionsButton}
         };
@@ -81,14 +65,14 @@ public class OptionsPanel extends JPanel {
     }
 
     private void applyButtonAction() {
-        int width = this.getSizeFromTextField(this.fieldWidthTextField);
-        int height = this.getSizeFromTextField(this.fieldHeightTextField);
+        int width = this.getSizeFromTextField(this.widthTextField);
+        int height = this.getSizeFromTextField(this.heightTextField);
+        int minesCount = this.getSizeFromTextField(this.minesCountTextField);
 
-        if(this.isCorrectSize(width, height)) {
-            LevelDifficulty levelDifficulty = this.getLevelDifficulty(this.levelDiffCheckBoxList);
+        if(this.isCorrectSize(width, height, minesCount)) {
             InputTypeControl inputTypeControl = getInputTypeControl(this.inputControlCheckBoxesList);
 
-            GameParameters newGameParameters = new GameParameters(width, height, levelDifficulty, inputTypeControl);
+            GameParameters newGameParameters = new GameParameters(width, height, minesCount, inputTypeControl);
 
             mainWindow.getGameController().setGameParameters(newGameParameters); // load new game parameters
             mainWindow.getGameController().startGame();// initializing game
@@ -116,24 +100,35 @@ public class OptionsPanel extends JPanel {
         this.add(right);
     }
 
-    private boolean isCorrectSize(int width, int height) {
+    private boolean isCorrectSize(int width, int height, int minesCount) {
         if(width < 10 || height < 10) {
-            MessageToUser.getMessage("Numbers from 10 to 30 available");
+            MessageToUser.getMessage("Numbers from 10 to 30 available for mines field size!");
             return false;
         }
         if(width > 30 || height > 30) {
-            MessageToUser.getMessage("Numbers from 10 to 30 available");
+            MessageToUser.getMessage("Numbers from 10 to 30 available for mines field size!");
             return false;
         }
         if(Math.abs(width-height) > 5) {
             MessageToUser.getMessage("Width and Height range must be <= 5");
             return false;
         }
-
-        return true;
+        return this.isCorrectMinesCount(width, height, minesCount);
     }
 
-    private void turnOffOtherCheckBoxesIfOneSelected(List<JCheckBox> checkBoxList) {
+    private boolean isCorrectMinesCount(int width, int height, int minesCount) {
+        int minMinesCount = width * height / 10; //10% mines
+        int maxMinesCount = width * height / 2; //50% mines
+
+        if(minesCount >= minMinesCount && minesCount <= maxMinesCount)
+            return true;
+        else {
+            MessageToUser.getMessage("Wrong number of mines. Diapason for this width and height: " + "min - " + minMinesCount + " : " + "max -" + maxMinesCount);
+            return false;
+        }
+    }
+
+    private void setOneCheckBoxSelectedAtSameTime(List<JCheckBox> checkBoxList) {
         checkBoxList.get(0).setSelected(true);
         checkBoxList.get(0).setEnabled(false);
 
@@ -152,26 +147,6 @@ public class OptionsPanel extends JPanel {
         }
     }
 
-    private JPanel createInnerPanel(Component[] components) {
-        JPanel panel = new JPanel(new GridLayout());
-
-        for(Component component : components)
-            panel.add(component);
-
-        return panel;
-    }
-
-    private LevelDifficulty getLevelDifficulty(List<JCheckBox> levelDiffCheckBoxList) {
-        LevelDifficulty levelDifficulty = LevelDifficulty.EASY;
-        for(JCheckBox levelDiffCheckBox : levelDiffCheckBoxList) {
-            if(levelDiffCheckBox.isSelected()) {
-                levelDifficulty = LevelDifficulty.valueOf(levelDiffCheckBox.getText());
-                break;
-            }
-        }
-        return levelDifficulty;
-    }
-
     private InputTypeControl getInputTypeControl(List<JCheckBox> checkBoxList) {
         InputTypeControl inputTypeControl = null;
 
@@ -187,16 +162,8 @@ public class OptionsPanel extends JPanel {
 
     private int getSizeFromTextField(JTextField textField) {
         if(textField.getText().isEmpty())
-            return this.mainWindow.getGameController().getGameParameters().getFieldWidth();
+            return 0;
         else
             return Integer.parseInt(textField.getText());
-    }
-
-    private JLabel[] getLabelsLevelDifficultyDescription(LevelDifficulty[] levelDifficulties) {
-        List<JLabel> labels = new ArrayList<>();
-        for(LevelDifficulty levelDifficulty : levelDifficulties)
-            labels.add(new JLabel(levelDifficulty.getDescription()));
-
-        return labels.toArray(new JLabel[labels.size()]);
     }
 }

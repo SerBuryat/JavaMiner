@@ -9,37 +9,19 @@ public class GameParameters {
     private final int blocksCount;
     private int flagsCount;
     private int minesCount;
-    private LevelDifficulty levelDifficulty;
     private InputTypeControl inputControlType;
 
-    // default parameters constructor (10x10 table, EASY level difficulty)
+    // default parameter constructor
     public GameParameters(InputTypeControl inputControlType) {
-        this(10,10,LevelDifficulty.EASY,inputControlType);
-    }
-
-    public GameParameters(int fieldWidth, int fieldHeight,
-                          LevelDifficulty levelDifficulty, InputTypeControl inputControlType) {
-        this(fieldWidth, fieldHeight, 0, levelDifficulty, inputControlType);
+        this(10,10,10,inputControlType);
     }
 
     public GameParameters(int fieldWidth, int fieldHeight, int minesCount, InputTypeControl inputControlType) {
-        this(fieldWidth, fieldHeight, minesCount, null, inputControlType);
-    }
-
-    private GameParameters (int fieldWidth, int fieldHeight, int minesCount,
-                            LevelDifficulty levelDifficulty, InputTypeControl inputControlType) {
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.blocksCount = this.fieldWidth * this.fieldHeight;
-
         this.inputControlType = inputControlType;
-
-        if(levelDifficulty == null)
-            this.minesCount = minesCount;
-        else {
-            this.levelDifficulty = levelDifficulty;
-            this.minesCount = (int) (this.blocksCount * levelDifficulty.getValue());
-        }
+        this.minesCount = minesCount;
         this.flagsCount = this.minesCount;
     }
 
@@ -55,7 +37,7 @@ public class GameParameters {
         return flagsCount;
     }
 
-    int getMinesCount() {
+    public int getMinesCount() {
         return minesCount;
     }
 
@@ -65,11 +47,5 @@ public class GameParameters {
 
     public InputTypeControl getInputControlType() {
         return inputControlType;
-    }
-
-    public void setLevelDifficulty(LevelDifficulty levelDifficulty) {
-        this.levelDifficulty = levelDifficulty;
-        this.minesCount = (int) (this.blocksCount * this.levelDifficulty.getValue());
-        this.flagsCount = minesCount;
     }
 }

@@ -16,8 +16,8 @@ class JTextFieldLogic extends PlainDocument {
             return;
         }
 
-        if ((getLength() + str.length()) <= limit) { // check limit of str.length
-            if(str.matches("[0-9]") && getLength() == 1 || str.matches("[1-9]") && getLength() == 0) {//only digits
+        if ((getLength() + str.length()) <= limit) {
+            if(str.matches("[0-9]")) {//only digits
                 super.insertString(offset, str, attr);
             }
         }

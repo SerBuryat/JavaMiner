@@ -125,18 +125,25 @@ public class GameModel implements ModelSubjectForObservers{
         int y = cell.getY();
         LinkedList<Cell> cellNeighbors = new LinkedList<>();
 
-        // add every cell from minesField[x-1][y-1] (top left neighbor) to minesField[x+2][y+2] (bottom right neighbor)
+        // take neighbors from TOP-LEFT corner to RIGHT-BOTTOM corner from current cell
         for (int i = x-1;i < x+2;i++) {
             for (int j = y-1;j < y+2;j++) {
-                //check mines field borders
-                if (!(i < 0 || j < 0 || i > (this.fieldWidth - 1) || j > (this.fieldHeight - 1)))
-                    if (!(i == y && j == x)) // if not current cell
+                if (!(this.isCorrectMinesFieldBorders(i, j, this.fieldWidth, this.fieldHeight)))
+                    if (!(this.isCurrentCell(i, j, cell)))
                         cellNeighbors.add(minesField[i][j]);
             }
         }
 
         return cellNeighbors;
 
+    }
+
+    private boolean isCurrentCell(int x, int y, Cell cell) {
+        return cell.getX() == x && cell.getY() == y;
+    }
+
+    private boolean isCorrectMinesFieldBorders(int i, int j, int fieldWidth, int fieldHeight) {
+        return (i < 0 || j < 0 || i > (fieldWidth - 1) || j > (fieldHeight - 1));
     }
 
     private void countNearMines(Cell cell) {
