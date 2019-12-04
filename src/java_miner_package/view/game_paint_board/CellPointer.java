@@ -1,5 +1,6 @@
 package java_miner_package.view.game_paint_board;
 
+import java_miner_package.controller.Direction;
 import java_miner_package.model.GameParameters;
 
 import java.awt.*;
@@ -26,35 +27,22 @@ public class CellPointer {
         g2.drawRoundRect(this.x * cellWidth, this.y * cellHeight, cellWidth, cellHeight, 10, 10);
     }
 
-    public void moveRight() {
-        this.setX(this.getX()+1);
-    }
-
-    public void moveDown() {
-        this.setY(this.getY()+1);
-    }
-
-    public void moveLeft() {
-        this.setX(this.getX()-1);
-    }
-
-    public void moveUp() {
-        this.setY(this.getY()-1);
+    public void move(Direction direction) {
+        switch (direction) {
+            case UP: this.moveUp();
+                     break;
+            case RIGHT: this.moveRight();
+                break;
+            case DOWN: this.moveDown();
+                break;
+            case LEFT: this.moveLeft();
+                break;
+        }
     }
 
     public void moveTo(int x, int y) {
         this.setX(x);
         this.setY(y);
-    }
-
-    private void setX(int x) {
-        if(x >= 0 && x < this.gameParameters.getFieldWidth())
-            this.x = x;
-    }
-
-    private void setY(int y) {
-        if(y >= 0 && y < this.gameParameters.getFieldHeight())
-            this.y = y;
     }
 
     public int getX() {
@@ -71,6 +59,32 @@ public class CellPointer {
 
     public int getCellHeight() {
         return cellHeight;
+    }
+
+    private void setX(int x) {
+        if(x >= 0 && x < this.gameParameters.getFieldWidth())
+            this.x = x;
+    }
+
+    private void setY(int y) {
+        if(y >= 0 && y < this.gameParameters.getFieldHeight())
+            this.y = y;
+    }
+
+    private void moveRight() {
+        this.setX(this.getX()+1);
+    }
+
+    private void moveDown() {
+        this.setY(this.getY()+1);
+    }
+
+    private void moveLeft() {
+        this.setX(this.getX()-1);
+    }
+
+    private void moveUp() {
+        this.setY(this.getY()-1);
     }
 
     @Override

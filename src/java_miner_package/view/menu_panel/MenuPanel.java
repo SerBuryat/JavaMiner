@@ -50,7 +50,7 @@ public class MenuPanel extends JPanel  {
                 mainWindow.loadPanelToMainWindow(new GamePanel(mainWindow));
             }
             else
-                MessageToUser.getMessage("Choose, level difficulty plz!");
+                MessageToUser.getMessage("Choose level difficulty plz!");
         });
         menuOptionsButton.addActionListener(action -> mainWindow.loadPanelToMainWindow(new OptionsPanel(mainWindow)));
         menuExitButton.addActionListener(action -> System.exit(1));

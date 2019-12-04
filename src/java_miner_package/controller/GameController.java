@@ -1,6 +1,8 @@
 package java_miner_package.controller;
 
+import java_miner_package.controller.input_control.InputTypeControl;
 import java_miner_package.controller.input_control.MouseControl;
+import java_miner_package.model.Cell;
 import java_miner_package.model.GameModel;
 import java_miner_package.model.GameParameters;
 import java_miner_package.view.game_paint_board.CellPointer;
@@ -24,53 +26,21 @@ public class GameController {
     public void startGame() {
         this.setGameParameters(this.gameParameters);
         this.gameModel.createGame();
-        this.gamePaintBoard = new GamePaintBoard(this.mainWindow, this.gameParameters.getInputControlType());
-    }
-
-    private void repaintGamePaintBoard() {
-        this.gamePaintBoard.repaint();
+        this.createGamePaintBoard(this.mainWindow, this.gameParameters.getInputControlType());
     }
 
     public void openCell(CellPointer cellPointer) {
-        for(DrawingCell[] arr : this.gamePaintBoard.getPaintBoardField()) {
-            for(DrawingCell drawingCell : arr) {
-                if(cellPointer.getX() == drawingCell.getX() && cellPointer.getY() == drawingCell.getY()) {
-                    this.gameModel.openCell(drawingCell.getCell());
-                }
-            }
-        }
+        this.gameModel.openCell(this.getCellPointedByCellPointer(cellPointer));
         this.repaintGamePaintBoard();
     }
 
     public void setFlag(CellPointer cellPointer) {
-        for(DrawingCell[] arr : this.gamePaintBoard.getPaintBoardField()) {
-            for(DrawingCell drawingCell : arr) {
-                if(cellPointer.getX() == drawingCell.getX() && cellPointer.getY() == drawingCell.getY()) {
-                    this.gameModel.setFlagOnCell(drawingCell.getCell());
-                    break;
-                }
-            }
-        }
+        this.gameModel.setFlagOnCell(this.getCellPointedByCellPointer(cellPointer));
         this.repaintGamePaintBoard();
     }
 
-    public void moveCellPointerUp(CellPointer cellPointer) {
-        cellPointer.moveUp();
-        this.repaintGamePaintBoard();
-    }
-
-    public void moveCellPointerRight(CellPointer cellPointer) {
-        cellPointer.moveRight();
-        this.repaintGamePaintBoard();
-    }
-
-    public void moveCellPointerDown(CellPointer cellPointer) {
-        cellPointer.moveDown();
-        this.repaintGamePaintBoard();
-    }
-
-    public void moveCellPointerLeft(CellPointer cellPointer) {
-        cellPointer.moveLeft();
+    public void moveCellPointer(CellPointer cellPointer, Direction direction) {
+        cellPointer.move(direction);
         this.repaintGamePaintBoard();
     }
 
@@ -90,5 +60,31 @@ public class GameController {
 
     public GamePaintBoard getGamePaintBoard() {
         return gamePaintBoard;
+    }
+
+    private boolean isCoordinatesEquals(CellPointer cellPointer, DrawingCell drawingCell) {
+        return cellPointer.getX() == drawingCell.getX() && cellPointer.getY() == drawingCell.getY();
+    }
+
+    private Cell getCellPointedByCellPointer(CellPointer cellPointer) {
+        Cell cell = null;
+        for(DrawingCell[] arr : this.gamePaintBoard.getPaintBoardField()) {
+            for(DrawingCell drawingCell : arr) {
+                if(this.isCoordinatesEquals(cellPointer, drawingCell)) {
+                    cell =drawingCell.getCell();
+                }
+            }
+        }
+        return cell;
+    }
+
+    private GamePaintBoard createGamePaintBoard(MainWindow mainWindow, InputTypeControl inputTypeControl) {
+        GamePaintBoard gamePaintBoard = new GamePaintBoard(mainWindow, inputTypeControl);
+        this.gamePaintBoard = gamePaintBoard;
+        return gamePaintBoard;
+    }
+
+    private void repaintGamePaintBoard() {
+        this.gamePaintBoard.repaint();
     }
 }

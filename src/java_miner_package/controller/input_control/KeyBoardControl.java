@@ -1,5 +1,6 @@
 package java_miner_package.controller.input_control;
 
+import java_miner_package.controller.Direction;
 import java_miner_package.controller.GameController;
 import java_miner_package.view.game_paint_board.GamePaintBoard;
 
@@ -23,16 +24,16 @@ public class KeyBoardControl extends InputTypeControl implements KeyListener{
 
         switch (keycode) {
             case KeyEvent.VK_LEFT:
-                super.gameController.moveCellPointerLeft(super.cellPointer);
+                super.gameController.moveCellPointer(super.cellPointer, Direction.LEFT);
                 break;
             case KeyEvent.VK_RIGHT:
-                super.gameController.moveCellPointerRight(super.cellPointer);
+                super.gameController.moveCellPointer(super.cellPointer, Direction.RIGHT);
                 break;
             case KeyEvent.VK_UP:
-                super.gameController.moveCellPointerUp(super.cellPointer);
+                super.gameController.moveCellPointer(super.cellPointer, Direction.UP);
                 break;
             case KeyEvent.VK_DOWN:
-                super.gameController.moveCellPointerDown(super.cellPointer);
+                super.gameController.moveCellPointer(super.cellPointer, Direction.DOWN);
                 break;
             case KeyEvent.VK_SPACE:
                 super.gameController.openCell(this.cellPointer);
