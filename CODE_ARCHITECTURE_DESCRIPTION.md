@@ -52,6 +52,7 @@ Here is located .png **image resource**
      - **MouseControl** *class*
    - **GameController** *class*
    - **GameTimer** *class*
+   - **Direction** *enum*
 4. **JavaMinerStart** *class*
 5. **MessageToUser** *class*
 
@@ -154,6 +155,10 @@ Represent a main controller :
 #### *GameTimer class*
 
 Entity for GameStatusBoard which show a game time. (how much user playing in the current game) 
+
+#### *Direction enum*
+
+Represent simple enum for directions(up, right, down, left). Mainly for CellPointer movement.
 
 
 ### 4. *JavaMinerStart* *class*
